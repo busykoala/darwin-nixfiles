@@ -2,6 +2,10 @@
 
 {
   home.stateVersion = "23.05"; # Please read the comment before changing.
+  
+  imports = [
+    ./aliases.nix
+  ];
 
   home.packages = with pkgs; [
     curl
