@@ -50,6 +50,7 @@
 
   programs = {
     alacritty = import ./tools/alacritty.nix;
+    git = import ./tools/git.nix;
     neovim = import ./tools/neovim.nix { inherit pkgs; };
     tmux = import ./tools/tmux.nix;
     zsh = import ./tools/zsh.nix;
