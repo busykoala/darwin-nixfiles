@@ -24,6 +24,7 @@
     keepassxc
     kubectl
     kubernetes-helm
+    nerdfonts
     nodejs
     openssl
     opentofu
@@ -48,8 +49,10 @@
   programs.home-manager.enable = true;
 
   programs = {
-    zsh = import ./tools/zsh.nix;
+    alacritty = import ./tools/alacritty.nix;
     neovim = import ./tools/neovim.nix { inherit pkgs; };
+    tmux = import ./tools/tmux.nix;
+    zsh = import ./tools/zsh.nix;
   };
 
 }
