@@ -8,6 +8,8 @@
   ];
 
   home.packages = with pkgs; [
+    awscli2
+    azure-cli
     curl
     delta
     eza
