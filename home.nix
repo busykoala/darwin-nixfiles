@@ -17,6 +17,7 @@
     gcc
     gimp
     gnumake
+    gnupg
     go
     gopls
     jq
