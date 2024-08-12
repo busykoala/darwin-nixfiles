@@ -57,6 +57,7 @@
     neovim = import ./tools/neovim.nix { inherit pkgs; };
     tmux = import ./tools/tmux.nix;
     zsh = import ./tools/zsh.nix;
+    direnv = import ./tools/direnv.nix;
   };
 
 }
