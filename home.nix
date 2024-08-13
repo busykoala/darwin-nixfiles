@@ -12,6 +12,7 @@
     azure-cli
     curl
     delta
+    dive
     eza
     fd
     file
