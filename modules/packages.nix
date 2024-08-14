@@ -1,0 +1,40 @@
+{ pkgs }:
+
+{
+  home.packages = with pkgs; [
+    awscli2
+    azure-cli
+    curl
+    delta
+    dive
+    eza
+    fd
+    file
+    fzf
+    gcc
+    gimp
+    gnumake
+    gnupg
+    go
+    gopls
+    jq
+    k9s
+    keepassxc
+    kubectl
+    kubernetes-helm
+    nerdfonts
+    nodejs
+    openssl
+    opentofu
+    poetry
+    ripgrep
+    thefuck
+    tmux
+    tree
+    unzip
+    wget
+    whois
+    yarn
+    zip
+  ];
+}

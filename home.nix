@@ -2,63 +2,28 @@
 
 {
   home.stateVersion = "23.05"; # Please read the comment before changing.
-  
-  imports = [
-    ./aliases.nix
-  ];
 
-  home.packages = with pkgs; [
-    awscli2
-    azure-cli
-    curl
-    delta
-    dive
-    eza
-    fd
-    file
-    fzf
-    gcc
-    gimp
-    gnumake
-    gnupg
-    go
-    gopls
-    jq
-    k9s
-    keepassxc
-    kubectl
-    kubernetes-helm
-    nerdfonts
-    nodejs
-    openssl
-    opentofu
-    poetry
-    ripgrep
-    thefuck
-    tmux
-    tree
-    unzip
-    wget
-    whois
-    yarn
-    zip
+  imports = [
+    ./modules/aliases.nix
+    (import ./modules/packages.nix { inherit pkgs; })
   ];
 
   home.file = {
+    # Add any file-specific configuration here if needed
   };
 
   home.sessionVariables = {
+    # Add any session variables you want to set here
   };
 
   programs.home-manager.enable = true;
 
   programs = {
-    alacritty = import ./tools/alacritty.nix;
-    git = import ./tools/git.nix;
-    neovim = import ./tools/neovim.nix { inherit pkgs; };
-    tmux = import ./tools/tmux.nix;
-    zsh = import ./tools/zsh.nix;
-    direnv = import ./tools/direnv.nix;
+    alacritty = import ./modules/programs/alacritty.nix;
+    git = import ./modules/programs/git.nix;
+    neovim = import ./modules/programs/neovim.nix { inherit pkgs; };
+    tmux = import ./modules/programs/tmux.nix;
+    zsh = import ./modules/programs/zsh.nix;
+    direnv = import ./modules/programs/direnv.nix;
   };
-
 }
