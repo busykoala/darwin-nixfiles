@@ -11,7 +11,7 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 ```bash
 git clone git@github.com:busykoala/darwin-nixfiles.git ~/nixfiles
 cd ~/nixfiles
-nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .
+make [ help | rebuild | update | clean ]
 ```
 
 ## Direnv issue
