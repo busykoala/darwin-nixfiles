@@ -18,6 +18,12 @@
     branch = {
       autosetuprebase = "always";
     };
+    gpg = {
+      program = "gpg";
+    };
+    commit = {
+      gpgSign = true;
+    };
   };
   lfs.enable = true;
 }
