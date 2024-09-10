@@ -18,5 +18,6 @@
     tmux = import ./modules/programs/tmux.nix;
     zsh = import ./modules/programs/zsh.nix;
     direnv = import ./modules/programs/direnv.nix;
+    ssh = import ./modules/programs/ssh.nix;
   };
 }
