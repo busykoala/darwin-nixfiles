@@ -32,5 +32,8 @@
 
     # Set the history limit so we get lots of scrollback.
     setw -g history-limit 4000000
+
+    # Set default shell to zsh
+    set -g default-command /bin/zsh
   '';
 }
