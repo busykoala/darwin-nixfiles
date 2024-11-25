@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    aws-sam-cli
     awscli2
     azure-cli
     curl
@@ -28,6 +29,7 @@
     opentofu
     poetry
     ripgrep
+    tflint
     thefuck
     tmux
     tree
