@@ -20,7 +20,6 @@
     gopls
     jq
     k9s
-    keepassxc
     kubectl
     kubernetes-helm
     nodejs
