@@ -19,6 +19,12 @@
     gnupg
     go
     gopls
+    jetbrains.datagrip
+    jetbrains.goland
+    jetbrains.idea-ultimate
+    jetbrains.pycharm-professional
+    jetbrains.rust-rover
+    jetbrains.webstorm
     jq
     k9s
     kubectl
