@@ -1,6 +1,6 @@
 {
   enable = true;
-  userEmail = "matthias@bespinian.io";
+  userEmail = "matthias@busykoala.io";
   userName = "Matthias Osswald";
   ignores = [
     ".idea" ".vscode" ".DS_Store" ".envrc" "shell.nix" "*.swp" "*.swo"

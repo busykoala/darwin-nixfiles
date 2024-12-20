@@ -11,7 +11,7 @@
 
   outputs = inputs@{ nixpkgs, home-manager, darwin, ... }: {
     darwinConfigurations = {
-      Matthiass-MacBook-Air = darwin.lib.darwinSystem {
+      busykoala = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           ./darwin.nix

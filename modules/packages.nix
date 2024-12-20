@@ -23,7 +23,6 @@
     keepassxc
     kubectl
     kubernetes-helm
-    nerdfonts
     nodejs
     openssl
     opentofu

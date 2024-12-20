@@ -1,6 +1,9 @@
 {
   enable = true;
   settings = {
+    general = {
+      live_config_reload = true;
+    };
     window = {
       # Don't activate on Gnome! Alacritty won't start if this is enabled.
       # startup_mode = "Maximized";
@@ -11,7 +14,6 @@
     font = {
       size = 13.0;
     };
-    live_config_reload = true;
     colors = {
       primary = {
         background = "0x1c1c1c";

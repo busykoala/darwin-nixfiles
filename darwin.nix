@@ -1,8 +1,12 @@
 { pkgs, ... }: 
 
 {
-  environment.systemPackages = [
+
+  imports = [
+    ./modules/homebrew.nix
   ];
+
+  environment.systemPackages = [ ];
 
   services.nix-daemon.enable = true;
 
@@ -18,7 +22,31 @@
 
   programs.zsh.enable = true;
 
-  system.stateVersion = 4;
+  system = {
+    stateVersion = 4;
+
+    defaults = {
+      dock = {
+        autohide = true;
+        orientation = "bottom";
+        persistent-apps = [ ];
+        show-recents = false;
+      };
+      NSGlobalDomain = {
+        NSAutomaticSpellingCorrectionEnabled = false;
+        "com.apple.swipescrolldirection" = false;
+        InitialKeyRepeat = 15;
+        KeyRepeat = 2;
+      };
+    };
+
+    keyboard = {
+        enableKeyMapping = true;
+        remapCapsLockToControl = true;
+    };
+  };
+
+  security.pam.enableSudoTouchIdAuth = true;
 
   users.users.speedy = {
     name = "speedy";

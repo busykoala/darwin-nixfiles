@@ -22,3 +22,4 @@ update:
 # Clean up old packages and configurations
 clean:
 	nix-collect-garbage
+	./scripts/brew_clean.sh
