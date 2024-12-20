@@ -7,6 +7,7 @@
     azure-cli
     curl
     delta
+    discord
     dive
     eza
     fd
@@ -27,6 +28,7 @@
     opentofu
     poetry
     ripgrep
+    spotify
     tflint
     thefuck
     tmux

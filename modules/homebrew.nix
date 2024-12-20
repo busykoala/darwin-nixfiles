@@ -9,9 +9,10 @@
     casks = [
         "bitwarden"
         "google-chrome"
-        "microsoft-office"
         "microsoft-auto-update"
+        "microsoft-office"
         "raycast"
+        "todoist"
     ];
   };
 }
