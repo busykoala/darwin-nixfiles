@@ -34,6 +34,7 @@
     opentofu
     poetry
     ripgrep
+    signal-desktop
     spotify
     tflint
     thefuck
