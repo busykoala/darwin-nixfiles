@@ -7,7 +7,6 @@
     azure-cli
     curl
     delta
-    discord
     dive
     eza
     fd
@@ -34,7 +33,6 @@
     opentofu
     poetry
     ripgrep
-    signal-desktop
     spotify
     tflint
     thefuck
