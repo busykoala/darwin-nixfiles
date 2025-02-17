@@ -8,6 +8,7 @@
     curl
     delta
     dive
+    drawio
     eza
     fd
     file
