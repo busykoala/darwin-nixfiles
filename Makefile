@@ -18,6 +18,7 @@ rebuild:
 update:
 	nix flake update
 	$(MAKE) rebuild
+	$(MAKE) clean
 
 # Clean up old packages and configurations
 clean:

@@ -8,7 +8,7 @@
 
   environment.systemPackages = [ ];
 
-  services.nix-daemon.enable = true;
+  ids.gids.nixbld = 350;
 
   nix.settings.experimental-features = "nix-command flakes";
 
@@ -46,7 +46,7 @@
     };
   };
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   users.users.speedy = {
     name = "speedy";
