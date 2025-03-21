@@ -36,7 +36,7 @@
     ripgrep
     spotify
     tflint
-    thefuck
+    # thefuck
     tmux
     tree
     unzip
