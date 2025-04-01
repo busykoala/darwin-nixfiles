@@ -16,8 +16,8 @@
         Hostname            194.13.80.17
         User                root
 
-    Host                    mega-server↵
-        HostName            192.168.50.73↵
-        User                zords↵
+    Host                    mega-server
+        HostName            192.168.50.73
+        User                zords
   '';
 }

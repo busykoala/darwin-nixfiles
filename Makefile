@@ -22,5 +22,5 @@ update:
 
 # Clean up old packages and configurations
 clean:
-	nix-collect-garbage
+	nix-collect-garbage --delete-older-than 30d
 	./scripts/brew_clean.sh
