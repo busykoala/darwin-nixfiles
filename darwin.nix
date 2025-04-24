@@ -1,7 +1,4 @@
-{ pkgs, ... }: 
-
-{
-
+{ pkgs, ... }: {
   imports = [
     ./modules/homebrew.nix
   ];
@@ -41,8 +38,8 @@
     };
 
     keyboard = {
-        enableKeyMapping = true;
-        remapCapsLockToControl = true;
+      enableKeyMapping = true;
+      remapCapsLockToControl = true;
     };
   };
 

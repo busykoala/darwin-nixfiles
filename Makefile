@@ -1,6 +1,6 @@
 # Makefile for Nix management with flakes
 
-.PHONY: help rebuild update clean
+.PHONY: help rebuild update clean format
 
 # Default target
 help:
@@ -9,6 +9,7 @@ help:
 	@echo "  make rebuild - Rebuild and switch to the new configuration"
 	@echo "  make update  - Update flake inputs and rebuild"
 	@echo "  make clean   - Clean up old packages and configurations"
+	@echo "  make format  - Format the Nix files using nixpkgs-fmt"
 
 # Rebuild and switch
 rebuild:
@@ -25,3 +26,6 @@ clean:
 	nix-collect-garbage --delete-older-than 7d
 	sudo nix-collect-garbage --delete-older-than 7d
 	./scripts/brew_clean.sh
+
+format:
+	nix fmt .

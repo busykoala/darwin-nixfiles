@@ -3,8 +3,18 @@
   userEmail = "matthias@busykoala.io";
   userName = "Matthias Osswald";
   ignores = [
-    ".idea" ".vscode" ".DS_Store" ".envrc" "shell.nix" "*.swp" "*.swo"
-    "nohup.out" "tags" "tags.lock" "tags.temp" ".direnv"
+    ".idea"
+    ".vscode"
+    ".DS_Store"
+    ".envrc"
+    "shell.nix"
+    "*.swp"
+    "*.swo"
+    "nohup.out"
+    "tags"
+    "tags.lock"
+    "tags.temp"
+    ".direnv"
   ];
   extraConfig = {
     core = {

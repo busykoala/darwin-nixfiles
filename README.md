@@ -19,5 +19,5 @@ brew is used to install GUI apps that are not available via nix packags.
 ```bash
 git clone git@github.com:busykoala/darwin-nixfiles.git ~/nixfiles
 cd ~/nixfiles
-make [ help | rebuild | update | clean ]
+make [ help | rebuild | update | clean | format ]
 ```

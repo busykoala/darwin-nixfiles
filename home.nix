@@ -1,14 +1,15 @@
-{ config, pkgs, ... }:
-
-{
+{ config
+, pkgs
+, ...
+}: {
   imports = [
     ./modules/aliases.nix
     (import ./modules/packages.nix { inherit pkgs; })
   ];
 
   home.stateVersion = "25.05";
-  home.file = {};
-  home.sessionVariables = {};
+  home.file = { };
+  home.sessionVariables = { };
 
   programs = {
     home-manager.enable = true;
