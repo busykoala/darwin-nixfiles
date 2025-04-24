@@ -1,5 +1,4 @@
-{ config
-, pkgs
+{ pkgs
 , ...
 }: {
   imports = [
@@ -7,9 +6,11 @@
     (import ./modules/packages.nix { inherit pkgs; })
   ];
 
-  home.stateVersion = "25.05";
-  home.file = { };
-  home.sessionVariables = { };
+  home = {
+    stateVersion = "25.05";
+    file = { };
+    sessionVariables = { };
+  };
 
   programs = {
     home-manager.enable = true;

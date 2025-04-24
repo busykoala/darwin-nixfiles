@@ -29,3 +29,5 @@ clean:
 
 format:
 	nix fmt .
+	statix check .
+	deadnix .

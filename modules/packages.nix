@@ -4,6 +4,7 @@
     awscli2
     azure-cli
     curl
+    deadnix
     delta
     dive
     drawio
@@ -34,6 +35,7 @@
     poetry
     ripgrep
     spotify
+    statix
     tflint
     thefuck
     tmux
