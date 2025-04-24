@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   imports = [
     ./modules/homebrew.nix
   ];
@@ -7,7 +7,10 @@
 
   ids.gids.nixbld = 350;
 
-  nix.settings.experimental-features = "nix-command flakes";
+  nix = {
+    package = pkgs.nixVersions.nix_2_28;
+    settings.experimental-features = "nix-command flakes";
+  };
 
   nixpkgs = {
     hostPlatform = "aarch64-darwin";

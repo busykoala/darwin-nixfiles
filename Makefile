@@ -28,6 +28,7 @@ clean:
 	./scripts/brew_clean.sh
 
 format:
+	nix config check
 	nix fmt .
 	statix check .
 	deadnix .
