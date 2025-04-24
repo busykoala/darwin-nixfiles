@@ -19,6 +19,7 @@
     gnupg
     go
     gopls
+    inetutils
     jetbrains.datagrip
     jetbrains.goland
     jetbrains.idea-ultimate
