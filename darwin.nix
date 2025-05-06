@@ -3,7 +3,18 @@
     ./modules/homebrew.nix
   ];
 
-  environment.systemPackages = [ ];
+  environment = {
+    systemPackages = [
+      pkgs.pam-reattach
+    ];
+
+    # https://write.rog.gr/writing/using-touchid-with-tmux/
+    etc."pam.d/sudo_local".text = ''
+    # Managed by Nix Darwin
+      auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
+      auth       sufficient     pam_tid.so
+    '';
+  };
 
   ids.gids.nixbld = 350;
 

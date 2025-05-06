@@ -1,4 +1,4 @@
-{
+{ pkgs }: {
   enable = true;
   escapeTime = 10;
   terminal = "tmux-256color";
@@ -32,8 +32,5 @@
 
     # Set the history limit so we get lots of scrollback.
     setw -g history-limit 4000000
-
-    # Set default shell to zsh
-    set -g default-command /bin/zsh
   '';
 }

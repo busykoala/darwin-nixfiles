@@ -1,4 +1,4 @@
-{
+{ pkgs }: {
   enable = true;
   settings = {
     general = {
@@ -43,6 +43,10 @@
         cyan = "0x00afaf";
         white = "0x5f8787";
       };
+    };
+    terminal.shell = {
+      program = "${pkgs.tmux}/bin/tmux";
+      args = [ "new-session" "-A" "-D" "-s" "main" ];
     };
   };
 }

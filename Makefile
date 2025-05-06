@@ -5,11 +5,12 @@
 # Default target
 help:
 	@echo "Usage:"
-	@echo "  make help     - Display this help message"
-	@echo "  make rebuild  - Rebuild and switch to the new configuration"
-	@echo "  make update   - Update flake inputs and rebuild"
-	@echo "  make clean    - Clean up old packages and configurations"
-	@echo "  make format   - Format the Nix files using nixpkgs-fmt"
+	@echo "  make help          - Display this help message"
+	@echo "  make rebuild       - Rebuild and switch to the new configuration"
+	@echo "  make update        - Update flake inputs and rebuild"
+	@echo "  make clean         - Clean up old packages and configurations"
+	@echo "  make format        - Format the Nix files using nixpkgs-fmt"
+	@echo "  make kill-tmux     - Kill the tmux session named 'main'"
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
@@ -36,3 +37,7 @@ format:
 	nix fmt .
 	statix check .
 	deadnix .
+
+kill-tmux:
+	@echo "🛑 Killing tmux session..."
+	tmux kill-session -t main
