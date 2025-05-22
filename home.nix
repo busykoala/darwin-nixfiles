@@ -17,7 +17,7 @@
     alacritty = import ./modules/programs/alacritty.nix { inherit pkgs; };
     git = import ./modules/programs/git.nix;
     neovim = import ./modules/programs/neovim.nix { inherit pkgs; };
-    tmux = import ./modules/programs/tmux.nix { inherit pkgs; };
+    tmux = import ./modules/programs/tmux.nix;
     zsh = import ./modules/programs/zsh.nix;
     direnv = import ./modules/programs/direnv.nix;
     ssh = import ./modules/programs/ssh.nix;

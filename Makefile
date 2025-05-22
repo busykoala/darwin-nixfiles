@@ -14,7 +14,7 @@ help:
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
-	nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .
+	sudo nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .
 
 update:
 	@echo "⬆️  Updating flake inputs..."

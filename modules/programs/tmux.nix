@@ -1,4 +1,4 @@
-{ pkgs }: {
+{
   enable = true;
   escapeTime = 10;
   terminal = "tmux-256color";

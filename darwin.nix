@@ -10,9 +10,9 @@
 
     # https://write.rog.gr/writing/using-touchid-with-tmux/
     etc."pam.d/sudo_local".text = ''
-    # Managed by Nix Darwin
-      auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
-      auth       sufficient     pam_tid.so
+      # Managed by Nix Darwin
+        auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
+        auth       sufficient     pam_tid.so
     '';
   };
 
@@ -35,6 +35,7 @@
 
   system = {
     stateVersion = 4;
+    primaryUser = "speedy";
 
     defaults = {
       dock = {
