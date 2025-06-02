@@ -11,6 +11,7 @@
     k = "kubectl";
     la = "exa -hal --icons";
     fuzzy = "sk -i -c 'rg {} --color=always' --ansi";
+    y = "yazi";
 
     ".." = "cd ..";
     "..." = "cd ../..";
