@@ -24,5 +24,6 @@
     direnv = import ./modules/programs/direnv.nix;
     ssh = import ./modules/programs/ssh.nix;
     gpg = import ./modules/programs/gpg.nix;
+    zoxide = import ./modules/programs/zoxide.nix;
   };
 }
