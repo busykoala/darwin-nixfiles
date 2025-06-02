@@ -6,7 +6,6 @@
       "colored-man-pages"
       "git"
       "vi-mode"
-      "thefuck"
       "sudo"
       "z"
     ];

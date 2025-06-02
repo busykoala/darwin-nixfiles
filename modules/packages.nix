@@ -37,7 +37,6 @@
     spotify
     statix
     tflint
-    thefuck
     tmux
     tree
     unzip
