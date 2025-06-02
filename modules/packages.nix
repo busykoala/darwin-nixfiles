@@ -32,6 +32,7 @@
     k9s
     kubectl
     kubernetes-helm
+    nerd-fonts.fira-code
     nodejs
     openssl
     opentofu

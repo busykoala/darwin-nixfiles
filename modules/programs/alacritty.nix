@@ -12,6 +12,10 @@
       history = 100000;
     };
     font = {
+      normal = {
+        family = "FiraCode Nerd Font";
+        style = "Regular";
+      };
       size = 13.0;
     };
     colors = {

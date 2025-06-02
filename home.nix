@@ -6,6 +6,8 @@
     (import ./modules/packages.nix { inherit pkgs; })
   ];
 
+  fonts.fontconfig.enable = true;
+
   home = {
     stateVersion = "25.05";
     file = { };
