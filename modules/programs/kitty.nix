@@ -43,6 +43,8 @@
     extraConfig = ''
       modify_font cell_height 83%
       modify_font baseline 2
+      startup_session full
+      confirm_os_window_close 0
       shell ${pkgs.tmux}/bin/tmux new-session -A -D -s main
     '';
   };
