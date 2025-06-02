@@ -4,6 +4,17 @@
   imports = [
     ./modules/aliases.nix
     (import ./modules/packages.nix { inherit pkgs; })
+
+    ./modules/programs/kitty.nix
+    ./modules/programs/direnv.nix
+    ./modules/programs/git.nix
+    ./modules/programs/gpg.nix
+    ./modules/programs/neovim.nix
+    ./modules/programs/ssh.nix
+    ./modules/programs/tmux.nix
+    ./modules/programs/yazi.nix
+    ./modules/programs/zoxide.nix
+    ./modules/programs/zsh.nix
   ];
 
   fonts.fontconfig.enable = true;
@@ -14,16 +25,5 @@
     sessionVariables = { };
   };
 
-  programs = {
-    home-manager.enable = true;
-    kitty = import ./modules/programs/kitty.nix { inherit pkgs; };
-    git = import ./modules/programs/git.nix;
-    neovim = import ./modules/programs/neovim.nix { inherit pkgs; };
-    tmux = import ./modules/programs/tmux.nix;
-    zsh = import ./modules/programs/zsh.nix;
-    direnv = import ./modules/programs/direnv.nix;
-    ssh = import ./modules/programs/ssh.nix;
-    gpg = import ./modules/programs/gpg.nix;
-    zoxide = import ./modules/programs/zoxide.nix;
-  };
+  programs.home-manager.enable = true;
 }

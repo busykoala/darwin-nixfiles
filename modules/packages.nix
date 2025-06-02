@@ -50,7 +50,6 @@
     whois
     xh
     yarn
-    yazi
     zip
   ];
 }

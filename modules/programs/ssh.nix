@@ -1,23 +1,25 @@
 {
-  enable = true;
+  programs.ssh = {
+    enable = true;
 
-  extraConfig = ''
-    Host *
+    extraConfig = ''
+      Host *
         UseKeychain         yes
         AddKeysToAgent      yes
         IdentityFile        ~/.ssh/id_rsa
 
-    Host                    rootServer
+      Host                    rootServer
         Hostname            194.13.82.8
         User                root
         ProxyJump           cockpitServer
 
-    Host                    cockpitServer
+      Host                    cockpitServer
         Hostname            194.13.80.17
         User                root
 
-    Host                    mega-server
+      Host                    mega-server
         HostName            192.168.50.73
         User                zords
-  '';
+    '';
+  };
 }
