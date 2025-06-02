@@ -30,7 +30,6 @@
     jetbrains.webstorm
     jq
     k9s
-    kitty
     kubectl
     kubernetes-helm
     nerd-fonts.fira-code

@@ -16,7 +16,6 @@
 
   programs = {
     home-manager.enable = true;
-    alacritty = import ./modules/programs/alacritty.nix { inherit pkgs; };
     kitty = import ./modules/programs/kitty.nix { inherit pkgs; };
     git = import ./modules/programs/git.nix;
     neovim = import ./modules/programs/neovim.nix { inherit pkgs; };
