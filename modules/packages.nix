@@ -3,11 +3,14 @@
     aws-sam-cli
     awscli2
     azure-cli
+    bat
     curl
     deadnix
     delta
     dive
     drawio
+    dua
+    dust
     eza
     fd
     file
@@ -34,6 +37,7 @@
     opentofu
     poetry
     ripgrep
+    skim
     spotify
     statix
     tflint
@@ -43,6 +47,7 @@
     watch
     wget
     whois
+    xh
     yarn
     zip
   ];

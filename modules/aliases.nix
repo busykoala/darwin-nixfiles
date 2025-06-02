@@ -7,12 +7,23 @@
     gs = "git status";
     gcm = "git commit -m";
 
-    grep = "grep --color";
     tf = "tofu";
     k = "kubectl";
-    la = "exa -hal";
+    la = "exa -hal --icons";
+    fuzzy = "sk -i -c 'rg {} --color=always' --ansi";
 
     ".." = "cd ..";
     "..." = "cd ../..";
+
+    # Binary replacements
+    cat = "bat";
+    ls = "exa";
+    diff = "delta";
+    find = "fd";
+    du = "dust";
+    df = "dua";
+    grep = "rg";
+    fzf = "sk --preview 'bat --color=always {}'";
+    curl = "xh";
   };
 }
