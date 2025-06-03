@@ -4,35 +4,39 @@
     escapeTime = 10;
     terminal = "tmux-256color";
     extraConfig = ''
-      # remap prefix from 'C-b' to 'C-a'
-        unbind C-b
-        set-option -g prefix C-a
-        bind-key C-a send-prefix
+      # Theme: Tokyo Night
+      set-option -g status-style "bg=#1a1b26 fg=#a9b1d6"
+      set-option -g message-style "bg=#1a1b26 fg=#7aa2f7"
+      set-option -g message-command-style "bg=#1a1b26 fg=#7aa2f7"
+      set-option -g pane-border-style "fg=#3b4261"
+      set-option -g pane-active-border-style "fg=#7aa2f7"
+      set-option -g status-left ""
+      set-option -g status-right ""
+      set-option -g window-status-current-style "bg=#7aa2f7 fg=#1a1b26"
+      set-option -g window-status-current-format " #I:#W "
+      set-option -g window-status-style "bg=#1a1b26 fg=#a9b1d6"
+      set-option -g window-status-format " #I:#W "
+      set-option -g status-justify "left"
+      set-option -g status-left-length 100
+      set-option -g status-right-length 100
+      set-option -g status "on"
 
-      # split panes using | and -
-        bind | split-window -h
-        bind - split-window -v
-        unbind '"'
-        unbind %
+      # Other settings
+      unbind C-b
+      set-option -g prefix C-a
+      bind-key C-a send-prefix
 
-      # Enable mouse mode (tmux 2.1 and above)
-        set -g mouse on
+      bind | split-window -h
+      bind - split-window -v
+      unbind '"'
+      unbind %
 
-      # don't rename windows automatically
-        set-option -g allow-rename off
-
-      # set vi mode
-        setw -g mode-keys vi
-
-      # reload config with `r`
-      # bind r source-file ~/.tmux.conf
-
-      # Start window and pane indices at 1.
-        set -g base-index 1
-        set -g pane-base-index 0
-
-      # Set the history limit so we get lots of scrollback.
-        setw -g history-limit 4000000
+      set -g mouse on
+      set-option -g allow-rename off
+      setw -g mode-keys vi
+      set -g base-index 1
+      set -g pane-base-index 0
+      setw -g history-limit 4000000
     '';
   };
 }
