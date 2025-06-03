@@ -1,8 +1,9 @@
-{
+{ config, pkgs, ... }: {
   programs.tmux = {
     enable = true;
     escapeTime = 10;
     terminal = "tmux-256color";
+
     extraConfig = ''
       # Theme: Tokyo Night
       set-option -g status-style "bg=#1a1b26 fg=#a9b1d6"
@@ -20,6 +21,9 @@
       set-option -g status-left-length 100
       set-option -g status-right-length 100
       set-option -g status "on"
+
+      set -g status-interval 1
+      set -g status-right "#(${config.home.homeDirectory}/nixfiles/assets/tmux-status-right.sh #{pane_pid})"
 
       # Other settings
       unbind C-b
