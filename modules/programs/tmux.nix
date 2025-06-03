@@ -45,6 +45,7 @@
       set -g base-index 1
       set -g pane-base-index 0
       setw -g history-limit 4000000
+      set-option -g renumber-windows on
     '';
   };
 }
