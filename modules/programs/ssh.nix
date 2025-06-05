@@ -18,7 +18,7 @@
         User                root
 
       Host                    mega-server
-        HostName            192.168.50.73
+        HostName            192.168.50.210
         User                zords
     '';
   };
