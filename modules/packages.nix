@@ -45,6 +45,7 @@
     tmux
     tree
     unzip
+    uv
     watch
     wget
     whois
