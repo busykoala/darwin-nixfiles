@@ -14,7 +14,7 @@ help:
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
-	sudo nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .
+	sudo nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .#busykoala
 
 update:
 	@echo "⬆️  Updating flake inputs..."
