@@ -20,6 +20,10 @@
       Host                    mega-server
         HostName            192.168.50.210
         User                zords
+
+      Host                    blizzard
+        HostName            192.168.31.106
+        User                busykoala
     '';
   };
 }
