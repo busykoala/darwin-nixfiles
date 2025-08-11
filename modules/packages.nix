@@ -47,6 +47,7 @@
     unzip
     uv
     watch
+    websocat
     wget
     whois
     xh
