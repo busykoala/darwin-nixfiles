@@ -1,9 +1,18 @@
 { config, pkgs, ... }: {
+  # Terraform toolchain for linting/formatting
+  home.packages = with pkgs; [
+    terraform
+    terraform-ls
+    tflint
+    tfsec
+  ];
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+
     extraConfig = ''
       "-------------------------------------------------------------------------------
       " Basic settings (leader, numbers, list...)
@@ -48,6 +57,7 @@
       \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
       \   fzf#vim#with_preview(), <bang>0)
     '';
+
     plugins = [
       {
         plugin = pkgs.vimPlugins.nerdtree;
@@ -86,6 +96,19 @@
         plugin = pkgs.vimPlugins.vim-airline-themes;
         config = "let g:airline_theme='tomorrow'";
       }
+
+      # --- Terraform: formatter + linter integration ---
+      {
+        plugin = pkgs.vimPlugins.vim-terraform;
+        config = ''
+          " Run `terraform fmt` automatically on save
+          let g:terraform_fmt_on_save = 1
+          " Align assignments for readability
+          let g:terraform_align = 1
+        '';
+      }
+      # -------------------------------------------------
+
       pkgs.vimPlugins.vim-commentary
       pkgs.vimPlugins.vim-devicons
       pkgs.vimPlugins.editorconfig-vim
@@ -103,6 +126,7 @@
       pkgs.vimPlugins.coc-css
       pkgs.vimPlugins.coc-docker
       pkgs.vimPlugins.coc-go
+
       {
         plugin = pkgs.vimPlugins.coc-nvim;
         config = ''
@@ -130,6 +154,10 @@
           nmap <silent> gr <Plug>(coc-references)
           nmap <silent> rr <Plug>(coc-rename)
           nmap <silent> ac <Plug>(coc-codeaction)
+
+          " --- Terraform via coc (uses terraform-ls, tflint if available) ---
+          let g:coc_global_extensions = get(g:, 'coc_global_extensions', []) + ['coc-terraform']
+          " -------------------------------------------------------------------
         '';
       }
       {
