@@ -10,7 +10,6 @@
       "microsoft-auto-update"
       "microsoft-office"
       "raycast"
-      "todoist"
     ];
   };
 }
