@@ -36,6 +36,7 @@
     nodejs
     openssl
     opentofu
+    pnpm
     poetry
     ripgrep
     skim
