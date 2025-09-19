@@ -17,14 +17,14 @@
     "..." = "cd ../..";
 
     # Binary replacements
-    cat = "bat";
+    # cat = "bat";
     ls = "exa";
     diff = "delta";
-    find = "fd";
+    # find = "fd";
     du = "dust";
     df = "dua";
-    grep = "rg";
+    # grep = "rg";
     fzf = "sk --preview 'bat --color=always {}'";
-    curl = "xh";
+    # curl = "xh";
   };
 }
