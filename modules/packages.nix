@@ -1,5 +1,6 @@
 { pkgs }: {
   home.packages = with pkgs; [
+    aliyun-cli
     aws-sam-cli
     awscli2
     azure-cli
