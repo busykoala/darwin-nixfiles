@@ -22,7 +22,7 @@
         User                zords
 
       Host                    blizzard
-        HostName            192.168.31.106
+        HostName            192.168.50.162
         User                busykoala
     '';
   };
