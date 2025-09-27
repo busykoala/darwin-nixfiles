@@ -18,6 +18,7 @@
     fzf
     gcc
     gimp
+    git-crypt
     gnumake
     gnupg
     go

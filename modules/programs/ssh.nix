@@ -18,12 +18,15 @@
         User                root
 
       Host                    mega-server
-        HostName            192.168.50.210
+        HostName            83.150.16.45
         User                zords
+        IdentitiesOnly      yes
 
       Host                    blizzard
         HostName            192.168.50.162
         User                busykoala
+        ProxyJump           mega-server
+        IdentitiesOnly      yes
     '';
   };
 }
