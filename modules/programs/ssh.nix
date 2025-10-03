@@ -24,7 +24,7 @@
 
       Host                    blizzard
         HostName            192.168.50.162
-        User                busykoala
+        User                zords
         ProxyJump           mega-server
         IdentitiesOnly      yes
     '';
