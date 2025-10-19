@@ -5,6 +5,7 @@
     awscli2
     azure-cli
     bat
+    codex
     curl
     deadnix
     delta
@@ -40,6 +41,7 @@
     opentofu
     pnpm
     poetry
+    rclone
     ripgrep
     skim
     spotify

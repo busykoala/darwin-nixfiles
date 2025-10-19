@@ -27,6 +27,12 @@
         User                zords
         ProxyJump           mega-server
         IdentitiesOnly      yes
+
+      Host                    turtle
+        HostName            192.168.50.188
+        User                zords
+        ProxyJump           mega-server
+        IdentitiesOnly      yes
     '';
   };
 }
