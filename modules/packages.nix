@@ -44,7 +44,6 @@
     rclone
     ripgrep
     skim
-    spotify
     statix
     tflint
     tmux

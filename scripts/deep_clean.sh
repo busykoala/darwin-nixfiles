@@ -36,11 +36,19 @@ rm -rf ~/Library/Caches/{pnpm,node-gyp,com.spotify.client} || true
 
 ### Docker ###
 echo "👉 Cleaning Docker images, containers, and volumes..."
+docker rm -f $(docker ps -aq) 2>/dev/null || true
+
+# Prune all buildx builders by trying both contexts
+docker buildx ls --format '{{.Name}}' | while read -r name; do
+  docker --context=default buildx prune -a -f --builder "$name" 2>/dev/null || true
+  docker --context=desktop-linux buildx prune -a -f --builder "$name" 2>/dev/null || true
+done || true
+
 docker system prune -a --volumes -f || true
 
 ### System/User caches (optional light wipe) ###
 echo "👉 Cleaning miscellaneous user caches..."
-rm -rf ~/Library/Caches/{Homebrew,kitty,helm,composer,wandb,pypoetry,JetBrains,Google,pnpm,node-gyp,com.spotify.client} || true
+rm -rf ~/Library/Caches/{Homebrew,kitty,helm,composer,wandb,pypoetry,JetBrains,Google,pnpm,node-gyp,com.spotify.client,go,go-build,pip,pip-audit,Yarn,typescript} || true
 
 ### Logs ###
 echo "👉 Trimming system logs..."
