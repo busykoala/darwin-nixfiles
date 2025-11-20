@@ -15,6 +15,7 @@
     dust
     eza
     fd
+    ffmpeg
     file
     fzf
     gcc
@@ -24,6 +25,7 @@
     gnupg
     go
     gopls
+    htop
     inetutils
     jetbrains.datagrip
     jetbrains.goland
@@ -35,6 +37,7 @@
     k9s
     kubectl
     kubernetes-helm
+    mactop
     nerd-fonts.fira-code
     nodejs
     openssl
@@ -46,6 +49,7 @@
     skim
     slack
     statix
+    tesseract
     tflint
     tmux
     tree
