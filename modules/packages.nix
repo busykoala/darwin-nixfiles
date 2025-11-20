@@ -44,6 +44,7 @@
     rclone
     ripgrep
     skim
+    slack
     statix
     tflint
     tmux

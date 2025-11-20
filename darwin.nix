@@ -18,11 +18,6 @@
 
   ids.gids.nixbld = 350;
 
-  nix = {
-    package = pkgs.nixVersions.nix_2_28;
-    settings.experimental-features = "nix-command flakes";
-  };
-
   nixpkgs = {
     hostPlatform = "aarch64-darwin";
     config = {

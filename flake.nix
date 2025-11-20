@@ -14,7 +14,15 @@
       busykoala = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
+          # your main darwin configuration
           ./darwin.nix
+
+          # disable nix-darwin's Nix installation management
+          {
+            nix.enable = false;
+          }
+
+          # home-manager integration
           home-manager.darwinModules.home-manager
           {
             home-manager = {
