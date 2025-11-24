@@ -1,9 +1,10 @@
 { pkgs
+, pkgsUnstable
 , ...
 }: {
   imports = [
     ./modules/aliases.nix
-    (import ./modules/packages.nix { inherit pkgs; })
+    (import ./modules/packages.nix { inherit pkgs pkgsUnstable; })
 
     ./modules/programs/kitty.nix
     ./modules/programs/direnv.nix
