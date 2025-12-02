@@ -26,6 +26,7 @@
       go
       gopls
       htop
+      imagemagick
       inetutils
       jetbrains.datagrip
       jetbrains.goland
@@ -37,6 +38,7 @@
       k9s
       kubectl
       kubernetes-helm
+      libsndfile
       mactop
       nerd-fonts.fira-code
       nodejs
