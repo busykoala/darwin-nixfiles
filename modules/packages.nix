@@ -5,6 +5,7 @@
       aws-sam-cli
       awscli2
       bat
+      binwalk
       codex
       curl
       deadnix
@@ -34,13 +35,19 @@
       jetbrains.pycharm-professional
       jetbrains.rust-rover
       jetbrains.webstorm
+      john
       jq
       k9s
+      kube-score
       kubectl
       kubernetes-helm
       libsndfile
       mactop
+      mtr
       nerd-fonts.fira-code
+      netdiscover
+      nikto
+      nmap
       nodejs
       openssl
       opentofu
@@ -50,7 +57,10 @@
       ripgrep
       skim
       slack
+      sqlmap
       statix
+      subfinder
+      tcpdump
       tesseract
       tflint
       tmux
@@ -61,6 +71,7 @@
       websocat
       wget
       whois
+      wireshark
       xh
       yarn
       zip
