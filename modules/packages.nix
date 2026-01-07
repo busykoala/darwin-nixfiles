@@ -18,6 +18,7 @@
       fd
       ffmpeg
       file
+      firefox
       fzf
       gcc
       gimp
@@ -55,6 +56,7 @@
       poetry
       rclone
       ripgrep
+      signal-desktop
       skim
       slack
       sqlmap
