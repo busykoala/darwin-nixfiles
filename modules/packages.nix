@@ -30,12 +30,6 @@
       htop
       imagemagick
       inetutils
-      jetbrains.datagrip
-      jetbrains.goland
-      jetbrains.idea-ultimate
-      jetbrains.pycharm-professional
-      jetbrains.rust-rover
-      jetbrains.webstorm
       john
       jq
       k9s
