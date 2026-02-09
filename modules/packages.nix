@@ -56,7 +56,6 @@
       poetry
       rclone
       ripgrep
-      signal-desktop
       skim
       slack
       sqlmap
