@@ -6,6 +6,7 @@
       awscli2
       bat
       binwalk
+      claude-code
       codex
       curl
       deadnix
