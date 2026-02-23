@@ -6,7 +6,6 @@
       awscli2
       bat
       binwalk
-      claude-code
       codex
       curl
       deadnix
@@ -45,6 +44,7 @@
       nikto
       nmap
       nodejs
+      opencode
       openssl
       opentofu
       pnpm
