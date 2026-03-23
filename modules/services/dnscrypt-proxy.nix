@@ -38,6 +38,10 @@ let
     refresh_delay = 72
     prefix = ""
   '';
+
+  dnscryptStart = pkgs.writeShellScript "dnscrypt-proxy-start" ''
+    exec ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy -config ${dnscryptConfig}
+  '';
 in
 {
   environment.systemPackages = [
@@ -47,13 +51,15 @@ in
   launchd.daemons.dnscrypt-proxy = {
     serviceConfig = {
       Label = "org.nix-darwin.dnscrypt-proxy";
-      ProgramArguments = [
-        "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy"
-        "-config"
-        "${dnscryptConfig}"
-      ];
+      ProgramArguments = [ "${dnscryptStart}" ];
       RunAtLoad = true;
-      KeepAlive = true;
+      KeepAlive = {
+        SuccessfulExit = false;
+        Crashed = true;
+        NetworkState = true;
+      };
+      ThrottleInterval = 5;
+      ProcessType = "Background";
       StandardOutPath = "/var/log/dnscrypt-proxy.log";
       StandardErrorPath = "/var/log/dnscrypt-proxy.log";
     };
