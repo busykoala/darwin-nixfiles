@@ -38,6 +38,7 @@
       kubectl
       kubernetes-helm
       libsndfile
+      maccy
       mactop
       mtr
       nerd-fonts.fira-code
