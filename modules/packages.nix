@@ -6,6 +6,7 @@
       awscli2
       bat
       binwalk
+      brave
       codex
       curl
       deadnix

@@ -1,6 +1,8 @@
 { pkgs, ... }: {
   imports = [
     ./modules/homebrew.nix
+    ./modules/services/dnscrypt-proxy.nix
+    ./modules/services/languagetool.nix
   ];
 
   environment = {
@@ -8,7 +10,6 @@
       pkgs.pam-reattach
     ];
 
-    # https://write.rog.gr/writing/using-touchid-with-tmux/
     etc."pam.d/sudo_local".text = ''
       # Managed by Nix Darwin
         auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
