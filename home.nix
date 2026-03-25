@@ -10,6 +10,7 @@
     ./modules/programs/direnv.nix
     ./modules/programs/git.nix
     ./modules/programs/gpg.nix
+    ./modules/programs/libreoffice.nix
     ./modules/programs/neovim.nix
     ./modules/programs/ssh.nix
     ./modules/programs/tmux.nix
