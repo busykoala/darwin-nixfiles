@@ -14,22 +14,40 @@ help:
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
-	sudo nix run nix-darwin --experimental-features 'flakes nix-command' -- switch --flake .#busykoala
+	@sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#busykoala
 
 update:
 	@echo "⬆️  Updating flake inputs..."
-	nix flake update
-	$(MAKE) rebuild
-	$(MAKE) clean
+	@nix flake update
+	@$(MAKE) --no-print-directory rebuild
+	@$(MAKE) --no-print-directory clean
 
 clean:
 	@echo "🧹 Running garbage collection..."
 	@echo "   User-level GC:"
-	-nix-collect-garbage --delete-older-than 7d || echo "⚠️  Some paths could not be removed (e.g. due to SIP)"
+	@nix-collect-garbage --delete-older-than 7d 2>&1 \
+		| tee /tmp/nix-gc-user.log \
+		| grep -v 'error: chmod' || true
 	@echo "   System-level GC (sudo):"
-	-sudo nix-collect-garbage --delete-older-than 7d || echo "⚠️  Some protected system paths could not be removed"
+	@sudo -H nix-collect-garbage --delete-older-than 7d 2>&1 \
+		| tee /tmp/nix-gc-system.log \
+		| grep -v 'error: chmod' || true
+	@grep -hq 'error: chmod "/nix/store/' /tmp/nix-gc-user.log /tmp/nix-gc-system.log 2>/dev/null && \
+		echo "   Removing SIP-protected leftover store paths..." && \
+		grep -h 'error: chmod "/nix/store/' /tmp/nix-gc-user.log /tmp/nix-gc-system.log 2>/dev/null \
+		| sed 's|.*error: chmod "/nix/store/\([^/]*\)/.*|\1|' \
+		| sort -u \
+		| while read -r pkg; do \
+			path="/nix/store/$$pkg"; \
+			if [ -d "$$path" ]; then \
+				echo "   Force-removing $$path"; \
+				sudo chflags -R noschg,nouchg "$$path" 2>/dev/null; \
+				sudo rm -rf "$$path"; \
+			fi; \
+		done || true
+	@rm -f /tmp/nix-gc-user.log /tmp/nix-gc-system.log
 	@echo "   Homebrew cleanup:"
-	./scripts/brew_clean.sh || echo "⚠️  brew_clean.sh failed or is missing"
+	@./scripts/brew_clean.sh || echo "⚠️  brew_clean.sh failed or is missing"
 
 format:
 	@echo "🧽 Formatting Nix sources..."
