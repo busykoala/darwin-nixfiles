@@ -21,7 +21,8 @@
           allowUnfreePredicate = _: true;
         };
       };
-    in {
+    in
+    {
       darwinConfigurations = {
         busykoala = darwin.lib.darwinSystem {
           system = "aarch64-darwin";

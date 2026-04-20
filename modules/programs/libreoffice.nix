@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 let
   libreofficeManual = pkgs.stdenvNoCC.mkDerivation {
     pname = "libreoffice-manual";
@@ -30,7 +30,8 @@ let
       platforms = [ "aarch64-darwin" ];
     };
   };
-in {
+in
+{
   home.packages = [
     libreofficeManual
   ];
