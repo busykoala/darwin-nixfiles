@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   programs.git = {
     enable = true;
@@ -30,7 +31,7 @@
         autosetuprebase = "always";
       };
       gpg = {
-        program = "gpg";
+        program = "${config.home.profileDirectory}/bin/gpg";
       };
       commit = {
         gpgSign = true;
