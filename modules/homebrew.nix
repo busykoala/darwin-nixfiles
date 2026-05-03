@@ -5,6 +5,7 @@
     masApps = { };
 
     casks = [
+      "libreoffice"
       "raycast"
     ];
   };

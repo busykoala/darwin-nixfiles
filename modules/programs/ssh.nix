@@ -1,3 +1,4 @@
+{ sshIdentityFile ? "~/.ssh/id_rsa" }:
 {
   programs.ssh = {
     enable = true;
@@ -6,7 +7,7 @@
       Host *
         UseKeychain         yes
         AddKeysToAgent      yes
-        IdentityFile        ~/.ssh/id_rsa
+        IdentityFile        ${sshIdentityFile}
 
       Host                    rootServer
         Hostname            194.13.82.8

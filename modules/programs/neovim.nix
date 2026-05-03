@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
   # Terraform toolchain for linting/formatting
   home.packages = with pkgs; [
     terraform

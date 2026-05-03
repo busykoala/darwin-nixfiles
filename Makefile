@@ -14,7 +14,7 @@ help:
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
-	@sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#busykoala
+	@sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#$(shell hostname -s)
 
 update:
 	@echo "⬆️  Updating flake inputs..."
@@ -53,8 +53,8 @@ format:
 	@echo "🧽 Formatting Nix sources..."
 	nix config check
 	nix fmt .
-	statix check .
-	deadnix .
+	nix run nixpkgs#statix -- check .
+	nix run nixpkgs#deadnix -- .
 
 kill-tmux:
 	@echo "🛑 Killing tmux session..."

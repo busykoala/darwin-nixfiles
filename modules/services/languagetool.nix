@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, userName, ... }:
 {
-  home-manager.users.speedy = _: {
+  home-manager.users.${userName} = _: {
     home.packages = [ pkgs.languagetool ];
   };
 

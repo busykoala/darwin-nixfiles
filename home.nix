@@ -1,5 +1,6 @@
 { pkgs
 , pkgsUnstable
+, sshIdentityFile
 , ...
 }: {
   imports = [
@@ -10,9 +11,8 @@
     ./modules/programs/direnv.nix
     ./modules/programs/git.nix
     ./modules/programs/gpg.nix
-    ./modules/programs/libreoffice.nix
     ./modules/programs/neovim.nix
-    ./modules/programs/ssh.nix
+    (import ./modules/programs/ssh.nix { inherit sshIdentityFile; })
     ./modules/programs/tmux.nix
     ./modules/programs/yazi.nix
     ./modules/programs/zoxide.nix

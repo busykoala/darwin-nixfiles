@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, userName, ... }: {
   imports = [
     ./modules/homebrew.nix
     ./modules/services/dnscrypt-proxy.nix
@@ -31,7 +31,7 @@
 
   system = {
     stateVersion = 4;
-    primaryUser = "speedy";
+    primaryUser = userName;
 
     defaults = {
       dock = {
@@ -56,8 +56,8 @@
 
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  users.users.speedy = {
-    name = "speedy";
-    home = "/Users/speedy";
+  users.users.${userName} = {
+    name = userName;
+    home = "/Users/${userName}";
   };
 }

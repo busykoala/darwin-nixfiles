@@ -21,34 +21,43 @@
           allowUnfreePredicate = _: true;
         };
       };
+
+      # Shared darwin system builder — call with per-host values.
+      mkDarwinConfig = { userName, sshIdentityFile }: darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit pkgsUnstable userName sshIdentityFile;
+        };
+        modules = [
+          ./darwin.nix
+          { nix.enable = false; }
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "before-home-manager";
+              users.${userName} = import ./home.nix;
+              extraSpecialArgs = {
+                inherit pkgsUnstable sshIdentityFile;
+              };
+            };
+          }
+        ];
+      };
     in
     {
       darwinConfigurations = {
-        busykoala = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          # Expose pkgsUnstable to all nix-darwin modules
-          specialArgs = { inherit pkgsUnstable; };
-          modules = [
-            # your main darwin configuration
-            ./darwin.nix
+        # busykoala device (Air)
+        Matthiass-MacBook-Air = mkDarwinConfig {
+          userName = "busykoala";
+          sshIdentityFile = "~/.ssh/id_ed25519";
+        };
 
-            # disable nix-darwin's Nix installation management
-            {
-              nix.enable = false;
-            }
-
-            # home-manager integration
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.speedy = import ./home.nix;
-                # Make pkgsUnstable visible to home.nix and its modules
-                extraSpecialArgs = { inherit pkgsUnstable; };
-              };
-            }
-          ];
+        # speedy device (Pro)
+        speedy-machine = mkDarwinConfig {
+          userName = "speedy";
+          sshIdentityFile = "~/.ssh/id_rsa";
         };
       };
 

@@ -19,8 +19,11 @@ brew is used to install GUI apps that are not available via nix packags.
 ```bash
 git clone git@github.com:busykoala/darwin-nixfiles.git ~/nixfiles
 cd ~/nixfiles
+cp local.nix.example local.nix
 make [ help | rebuild | update | clean | format ]
 ```
+
+`local.nix` is machine-local and gitignored. Use it for per-host values such as username and SSH `IdentityFile` while keeping all shared config in git.
 
 ## Services
 
