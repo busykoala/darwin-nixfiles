@@ -48,10 +48,15 @@ in
     pkgs.dnscrypt-proxy
   ];
 
+  system.activationScripts.preActivation.text = ''
+    mkdir -p /var/lib/dnscrypt-proxy
+  '';
+
   launchd.daemons.dnscrypt-proxy = {
     serviceConfig = {
       Label = "org.nix-darwin.dnscrypt-proxy";
       ProgramArguments = [ "${dnscryptStart}" ];
+      WorkingDirectory = "/var/lib/dnscrypt-proxy";
       RunAtLoad = true;
       KeepAlive = {
         SuccessfulExit = false;
