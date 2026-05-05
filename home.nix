@@ -17,6 +17,7 @@
     ./modules/programs/yazi.nix
     ./modules/programs/zoxide.nix
     ./modules/programs/zsh.nix
+    ./modules/programs/wireguard.nix
   ];
 
   fonts.fontconfig.enable = true;

@@ -34,6 +34,11 @@
         User                zords
         ProxyJump           mega-server
         IdentitiesOnly      yes
+
+      Host                    seniornett-node-00
+        HostName            37.156.46.226
+        User                ubuntu
+        IdentitiesOnly      yes
     '';
   };
 }
