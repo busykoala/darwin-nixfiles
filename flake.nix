@@ -47,7 +47,12 @@
       };
     in
     {
-      darwinConfigurations = {
+      darwinConfigurations = let
+        speedyMachine = mkDarwinConfig {
+          userName = "speedy";
+          sshIdentityFile = "~/.ssh/id_rsa";
+        };
+      in {
         # busykoala device (Air)
         Matthiass-MacBook-Air = mkDarwinConfig {
           userName = "busykoala";
@@ -55,10 +60,8 @@
         };
 
         # speedy device (Pro)
-        speedy-machine = mkDarwinConfig {
-          userName = "speedy";
-          sshIdentityFile = "~/.ssh/id_rsa";
-        };
+        speedy-machine = speedyMachine;
+        "matthiass-macbook-pro" = speedyMachine;
       };
 
       formatter.aarch64-darwin =

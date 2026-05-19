@@ -5,6 +5,7 @@
     masApps = { };
 
     casks = [
+      "android-platform-tools"
       "libreoffice"
       "raycast"
     ];
