@@ -8,6 +8,7 @@
       "android-platform-tools"
       "libreoffice"
       "raycast"
+      "shottr"
     ];
   };
 }
