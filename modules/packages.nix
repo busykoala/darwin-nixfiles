@@ -49,6 +49,7 @@ let
     drawio
     firefox
     gimp
+    ice-bar
     maccy
     slack
 
