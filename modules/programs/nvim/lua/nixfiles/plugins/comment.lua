@@ -1,0 +1,15 @@
+require("Comment").setup()
+
+local comment_api = require("Comment.api")
+local esc = vim.api.nvim_replace_termcodes("<ESC>", true, false, true)
+
+vim.keymap.set("n", "<C-/>", comment_api.toggle.linewise.current, { desc = "Toggle comment" })
+vim.keymap.set("n", "<C-_>", comment_api.toggle.linewise.current, { desc = "Toggle comment" })
+vim.keymap.set("x", "<C-/>", function()
+  vim.api.nvim_feedkeys(esc, "nx", false)
+  comment_api.toggle.linewise(vim.fn.visualmode())
+end, { desc = "Toggle comment" })
+vim.keymap.set("x", "<C-_>", function()
+  vim.api.nvim_feedkeys(esc, "nx", false)
+  comment_api.toggle.linewise(vim.fn.visualmode())
+end, { desc = "Toggle comment" })

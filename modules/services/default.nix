@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./languagetool.nix
+  ];
+}

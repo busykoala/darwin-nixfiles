@@ -5,47 +5,47 @@
 
     theme = {
       mgr = {
-        cwd = { fg = "#8be9fd"; };
-        border = { fg = "#1e1e2e"; };
-        preview_border = { fg = "#3a0ca3"; };
-        title = { fg = "#bd93f9"; };
-        highlight = { fg = "#ff79c6"; };
+        cwd = { fg = "#7dcfff"; };
+        border = { fg = "#3b4261"; };
+        preview_border = { fg = "#7aa2f7"; };
+        title = { fg = "#bb9af7"; };
+        highlight = { fg = "#f7768e"; };
       };
 
       status = {
-        separator_opened = { fg = "#50fa7b"; };
-        separator_closed = { fg = "#44475a"; };
-        mode_normal = { fg = "#50fa7b"; };
-        mode_select = { fg = "#f1fa8c"; };
-        mode_visual = { fg = "#ff79c6"; };
-        mode_shell = { fg = "#8be9fd"; };
-        progress_label = { fg = "#f8f8f2"; };
-        progress_bar = { fg = "#bd93f9"; };
+        separator_opened = { fg = "#7aa2f7"; };
+        separator_closed = { fg = "#414868"; };
+        mode_normal = { fg = "#9ece6a"; };
+        mode_select = { fg = "#e0af68"; };
+        mode_visual = { fg = "#bb9af7"; };
+        mode_shell = { fg = "#7dcfff"; };
+        progress_label = { fg = "#c0caf5"; };
+        progress_bar = { fg = "#7aa2f7"; };
       };
 
       input = {
-        border = { fg = "#3a0ca3"; };
-        title = { fg = "#ff79c6"; };
-        value = { fg = "#f8f8f2"; };
-        selected = { fg = "#ffb86c"; };
+        border = { fg = "#7aa2f7"; };
+        title = { fg = "#bb9af7"; };
+        value = { fg = "#c0caf5"; };
+        selected = { fg = "#ff9e64"; };
       };
 
       select = {
-        border = { fg = "#3a0ca3"; };
-        active = { fg = "#50fa7b"; };
-        inactive = { fg = "#6272a4"; };
+        border = { fg = "#7aa2f7"; };
+        active = { fg = "#9ece6a"; };
+        inactive = { fg = "#565f89"; };
       };
 
       filetype = {
         rules = [
-          { fg = "#8be9fd"; mime = "text/*"; }
-          { fg = "#ff79c6"; mime = "image/*"; }
-          { fg = "#f1fa8c"; mime = "video/*"; }
-          { fg = "#bd93f9"; mime = "audio/*"; }
-          { fg = "#ff5555"; mime = "application/zip"; }
-          { fg = "#ff6e6e"; mime = "application/gzip"; }
-          { fg = "#a4ffff"; mime = "application/bzip"; }
-          { fg = "#ffb86c"; mime = "application/json"; }
+          { fg = "#7dcfff"; mime = "text/*"; }
+          { fg = "#f7768e"; mime = "image/*"; }
+          { fg = "#e0af68"; mime = "video/*"; }
+          { fg = "#bb9af7"; mime = "audio/*"; }
+          { fg = "#f7768e"; mime = "application/zip"; }
+          { fg = "#ff9e64"; mime = "application/gzip"; }
+          { fg = "#7dcfff"; mime = "application/bzip"; }
+          { fg = "#9ece6a"; mime = "application/json"; }
         ];
       };
     };

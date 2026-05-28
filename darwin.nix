@@ -1,7 +1,7 @@
 { pkgs, userName, ... }: {
   imports = [
     ./modules/homebrew.nix
-    ./modules/services/languagetool.nix
+    ./modules/services
   ];
 
   environment = {

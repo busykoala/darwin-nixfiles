@@ -11,32 +11,44 @@
       scrollback_lines = 100000;
       update_check_interval = 0;
       disable_ligatures = "never";
+      window_padding_width = 8;
+      background_opacity = "1.0";
+      dynamic_background_opacity = false;
+      macos_option_as_alt = "both";
+      tab_bar_style = "powerline";
+      tab_powerline_style = "slanted";
+      active_tab_background = "#7aa2f7";
+      active_tab_foreground = "#1a1b26";
+      inactive_tab_background = "#24283b";
+      inactive_tab_foreground = "#a9b1d6";
 
-      background_image = "${config.home.homeDirectory}/nixfiles/assets/cyberpunk.png";
+      background_image = "${config.home.homeDirectory}/nixfiles/assets/tokyo-night-cyberpunk.png";
       background_image_layout = "scaled";
-      background_image_opacity = "0.12";
+      background_image_opacity = "0.14";
 
-      background = "#0f111a";
-      foreground = "#c3bfbf";
-      cursor = "#f38ba8";
+      background = "#1a1b26";
+      foreground = "#c0caf5";
+      cursor = "#c0caf5";
+      selection_background = "#33467c";
+      selection_foreground = "#c0caf5";
 
-      color0 = "#0f111a";
-      color1 = "#ff5555";
-      color2 = "#50fa7b";
-      color3 = "#f1fa8c";
-      color4 = "#bd93f9";
-      color5 = "#ff79c6";
-      color6 = "#8be9fd";
-      color7 = "#f8f8f2";
+      color0 = "#15161e";
+      color1 = "#f7768e";
+      color2 = "#9ece6a";
+      color3 = "#e0af68";
+      color4 = "#7aa2f7";
+      color5 = "#bb9af7";
+      color6 = "#7dcfff";
+      color7 = "#a9b1d6";
 
-      color8 = "#6272a4";
-      color9 = "#ff6e6e";
-      color10 = "#69ff94";
-      color11 = "#ffffa5";
-      color12 = "#d6acff";
-      color13 = "#ff92df";
-      color14 = "#a4ffff";
-      color15 = "#ffffff";
+      color8 = "#414868";
+      color9 = "#f7768e";
+      color10 = "#9ece6a";
+      color11 = "#e0af68";
+      color12 = "#7aa2f7";
+      color13 = "#bb9af7";
+      color14 = "#7dcfff";
+      color15 = "#c0caf5";
     };
 
     # Advanced config goes here

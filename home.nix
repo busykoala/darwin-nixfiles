@@ -7,17 +7,7 @@
     ./modules/aliases.nix
     (import ./modules/packages.nix { inherit pkgs pkgsUnstable; })
 
-    ./modules/programs/kitty.nix
-    ./modules/programs/direnv.nix
-    ./modules/programs/git.nix
-    ./modules/programs/gpg.nix
-    ./modules/programs/neovim.nix
-    (import ./modules/programs/ssh.nix { inherit sshIdentityFile; })
-    ./modules/programs/tmux.nix
-    ./modules/programs/yazi.nix
-    ./modules/programs/zoxide.nix
-    ./modules/programs/zsh.nix
-    ./modules/programs/wireguard.nix
+    (import ./modules/programs { inherit sshIdentityFile; })
   ];
 
   fonts.fontconfig.enable = true;
