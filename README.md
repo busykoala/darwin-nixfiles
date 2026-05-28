@@ -46,6 +46,13 @@ the flake outputs.
 To switch explicitly:
 
 ```bash
+sudo -H darwin-rebuild switch --flake .#Matthiass-MacBook-Air
+sudo -H darwin-rebuild switch --flake .#matthiass-macbook-pro
+```
+
+For the first bootstrap before `darwin-rebuild` is available:
+
+```bash
 sudo -H nix run nix-darwin -- switch --flake .#Matthiass-MacBook-Air
 sudo -H nix run nix-darwin -- switch --flake .#matthiass-macbook-pro
 ```

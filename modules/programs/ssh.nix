@@ -1,4 +1,4 @@
-{ sshIdentityFile ? "~/.ssh/id_rsa" }:
+{ sshIdentityFile ? "~/.ssh/id_rsa", ... }:
 {
   programs.ssh = {
     enable = true;

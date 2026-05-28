@@ -2,7 +2,7 @@
   homebrew = {
     enable = true;
 
-    onActivation.cleanup = "check";
+    onActivation.cleanup = "uninstall";
 
     masApps = { };
 

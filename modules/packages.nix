@@ -1,4 +1,4 @@
-{ pkgs, pkgsUnstable }:
+{ pkgs, pkgsUnstable, ... }:
 
 let
   inherit (pkgs) lib stdenv;

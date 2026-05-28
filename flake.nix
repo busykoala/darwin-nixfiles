@@ -18,7 +18,6 @@
         "codex"
         "drawio"
         "maccy"
-        "terraform"
       ];
 
       allowListedUnfree = pkg:

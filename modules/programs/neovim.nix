@@ -34,7 +34,7 @@ let
 in
 {
   home.packages = with pkgs; [
-    terraform
+    opentofu
     terraform-ls
     tflint
     tfsec

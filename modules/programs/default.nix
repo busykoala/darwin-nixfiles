@@ -1,4 +1,4 @@
-{ sshIdentityFile, ... }:
+{ ... }:
 {
   imports = [
     ./kitty.nix
@@ -6,7 +6,7 @@
     ./git.nix
     ./gpg.nix
     ./neovim.nix
-    (import ./ssh.nix { inherit sshIdentityFile; })
+    ./ssh.nix
     ./tmux.nix
     ./yazi.nix
     ./zoxide.nix

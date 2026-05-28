@@ -15,7 +15,7 @@ require("conform").setup({
     nix = { "nixpkgs_fmt" },
     python = { "ruff_format" },
     sh = { "shfmt" },
-    terraform = { "terraform_fmt" },
+    terraform = { "tofu_fmt" },
     toml = { "taplo" },
     typescript = { "prettierd" },
     typescriptreact = { "prettierd" },

@@ -18,7 +18,7 @@ help:
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
-	@sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#$(shell hostname -s)
+	@sudo -H darwin-rebuild switch --flake .#$(shell hostname -s)
 
 update:
 	@echo "⬆️  Updating flake inputs..."

@@ -1,13 +1,8 @@
-{ pkgs
-, pkgsUnstable
-, sshIdentityFile
-, ...
-}: {
+{
   imports = [
     ./modules/aliases.nix
-    (import ./modules/packages.nix { inherit pkgs pkgsUnstable; })
-
-    (import ./modules/programs { inherit sshIdentityFile; })
+    ./modules/packages.nix
+    ./modules/programs
   ];
 
   fonts.fontconfig.enable = true;
