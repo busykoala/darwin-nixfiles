@@ -89,7 +89,9 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
       initContent = ''
-        export PATH="/Applications/Little Snitch.app/Contents/Components:$PATH"
+        if [ -d "/Applications/Little Snitch.app/Contents/Components" ]; then
+          export PATH="/Applications/Little Snitch.app/Contents/Components:$PATH"
+        fi
       '';
       oh-my-zsh = {
         enable = true;

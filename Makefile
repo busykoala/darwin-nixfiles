@@ -1,6 +1,6 @@
 # Makefile for Nix management with flakes
 
-.PHONY: help rebuild update clean format check
+.PHONY: help rebuild update clean deep-clean format check
 
 HOSTS := Matthiass-MacBook-Air matthiass-macbook-pro
 
@@ -10,7 +10,8 @@ help:
 	@echo "  make help          - Display this help message"
 	@echo "  make rebuild       - Rebuild and switch to the new configuration"
 	@echo "  make update        - Update flake inputs and rebuild"
-	@echo "  make clean         - Clean up old packages and configurations"
+	@echo "  make clean         - Run normal Nix garbage collection"
+	@echo "  make deep-clean    - Run aggressive cleanup of stubborn store paths"
 	@echo "  make format        - Format the Nix files using nixpkgs-fmt"
 	@echo "  make check         - Run flake, formatting, statix, deadnix, and dry-run build checks"
 	@echo "  make kill-tmux     - Kill the tmux session named 'main'"
@@ -23,21 +24,28 @@ update:
 	@echo "⬆️  Updating flake inputs..."
 	@nix flake update
 	@$(MAKE) --no-print-directory rebuild
-	@$(MAKE) --no-print-directory clean
 
 clean:
 	@echo "🧹 Running garbage collection..."
-	@echo "   User-level GC:"
-	@nix-collect-garbage --delete-older-than 7d 2>&1 \
-		| tee /tmp/nix-gc-user.log \
-		| grep -v 'error: chmod' || true
-	@echo "   System-level GC (sudo):"
-	@sudo -H nix-collect-garbage --delete-older-than 7d 2>&1 \
-		| tee /tmp/nix-gc-system.log \
-		| grep -v 'error: chmod' || true
-	@grep -hq 'error: chmod "/nix/store/' /tmp/nix-gc-user.log /tmp/nix-gc-system.log 2>/dev/null && \
-		echo "   Removing SIP-protected leftover store paths..." && \
-		grep -h 'error: chmod "/nix/store/' /tmp/nix-gc-user.log /tmp/nix-gc-system.log 2>/dev/null \
+	nix-collect-garbage --delete-older-than 7d
+	sudo -H nix-collect-garbage --delete-older-than 7d
+
+deep-clean:
+	@echo "🧨 Running deep cleanup..."
+	@if [ "$$REALLY_DEEP_CLEAN" != "1" ]; then \
+		echo "Refusing deep cleanup without REALLY_DEEP_CLEAN=1."; \
+		exit 1; \
+	fi
+	@tmp_user_log=$$(mktemp /tmp/nix-gc-user.XXXXXX.log); \
+	tmp_system_log=$$(mktemp /tmp/nix-gc-system.XXXXXX.log); \
+	trap 'rm -f "$$tmp_user_log" "$$tmp_system_log"' EXIT; \
+	echo "   User-level GC:"; \
+	nix-collect-garbage --delete-older-than 7d 2>&1 | tee "$$tmp_user_log" | grep -v 'error: chmod' || true; \
+	echo "   System-level GC (sudo):"; \
+	sudo -H nix-collect-garbage --delete-older-than 7d 2>&1 | tee "$$tmp_system_log" | grep -v 'error: chmod' || true; \
+	echo "   Removing SIP-protected leftover store paths..."; \
+	grep -hq 'error: chmod "/nix/store/' "$$tmp_user_log" "$$tmp_system_log" 2>/dev/null && \
+		grep -h 'error: chmod "/nix/store/' "$$tmp_user_log" "$$tmp_system_log" 2>/dev/null \
 		| sed 's|.*error: chmod "/nix/store/\([^/]*\)/.*|\1|' \
 		| sort -u \
 		| while read -r pkg; do \
@@ -48,7 +56,6 @@ clean:
 				sudo rm -rf "$$path"; \
 			fi; \
 		done || true
-	@rm -f /tmp/nix-gc-user.log /tmp/nix-gc-system.log
 format:
 	@echo "🧽 Formatting Nix sources..."
 	nix config check

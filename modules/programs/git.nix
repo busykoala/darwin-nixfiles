@@ -5,8 +5,6 @@
     ignores = [
       ".idea"
       ".DS_Store"
-      ".envrc"
-      "shell.nix"
       "*.swp"
       "*.swo"
       "nohup.out"

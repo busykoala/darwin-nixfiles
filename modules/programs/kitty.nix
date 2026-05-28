@@ -1,4 +1,8 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }:
+let
+  backgroundImage = ../../assets/tokyo-night-cyberpunk.png;
+in
+{
   programs.kitty = {
     enable = true;
 
@@ -22,7 +26,7 @@
       inactive_tab_background = "#24283b";
       inactive_tab_foreground = "#a9b1d6";
 
-      background_image = "${config.home.homeDirectory}/nixfiles/assets/tokyo-night-cyberpunk.png";
+      background_image = "${backgroundImage}";
       background_image_layout = "scaled";
       background_image_opacity = "0.14";
 

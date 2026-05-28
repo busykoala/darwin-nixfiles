@@ -1,4 +1,4 @@
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, pkgsUnstable, lib, ... }:
 let
   nixfilesNvim = pkgs.vimUtils.buildVimPlugin {
     pname = "nixfiles-nvim";
@@ -29,9 +29,7 @@ let
   };
 
   luaRequire = module: ''
-    lua << EOF
     require('${module}')
-    EOF
   '';
 in
 {
@@ -64,6 +62,7 @@ in
     shellcheck
     shfmt
     stylua
+    tree-sitter
     yamllint
   ];
 
@@ -74,6 +73,12 @@ in
     vimAlias = true;
     withRuby = true;
     withPython3 = true;
+    extraPackages = [ pkgs.tree-sitter ];
+
+    initLua = lib.mkBefore ''
+      vim.opt.packpath:prepend(vim.fn.stdpath("data") .. "/site")
+      vim.cmd("packloadall")
+    '';
 
     plugins = [
       {
@@ -83,6 +88,7 @@ in
       }
 
       pkgs.vimPlugins.nvim-web-devicons
+      pkgs.vimPlugins.mini-icons
       pkgs.vimPlugins.plenary-nvim
 
       {
@@ -211,10 +217,8 @@ in
         plugin = pkgs.vimPlugins.nvim-lspconfig;
         type = "lua";
         config = ''
-          lua << EOF
           vim.g.nixfiles_ltex_cmd = '${pkgs.ltex-ls}/bin/ltex-ls'
           require('nixfiles.plugins.lsp')
-          EOF
         '';
       }
 
@@ -234,10 +238,8 @@ in
         plugin = codexNvim;
         type = "lua";
         config = ''
-          lua << EOF
           vim.g.nixfiles_codex_cmd = '${pkgsUnstable.codex}/bin/codex'
           require('nixfiles.plugins.codex')
-          EOF
         '';
       }
     ];

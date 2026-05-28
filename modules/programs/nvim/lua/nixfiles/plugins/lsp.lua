@@ -5,7 +5,6 @@ if has_blink then
   capabilities = blink.get_lsp_capabilities(capabilities)
 end
 
-local lspconfig = require("lspconfig")
 local schemastore = require("schemastore")
 local servers = {
   ansiblels = {},
@@ -73,7 +72,8 @@ local servers = {
 
 for server, config in pairs(servers) do
   config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
-  lspconfig[server].setup(config)
+  vim.lsp.config(server, config)
+  vim.lsp.enable(server)
 end
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })

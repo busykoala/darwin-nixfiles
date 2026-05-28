@@ -36,7 +36,7 @@
       mkDarwinConfig = { userName, sshIdentityFile }: darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = {
-          inherit pkgsUnstable userName sshIdentityFile;
+          inherit allowedUnfreePackages pkgsUnstable userName sshIdentityFile;
         };
         modules = [
           ./darwin.nix

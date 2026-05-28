@@ -1,4 +1,8 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }:
+let
+  statusRight = ../../assets/tmux-status-right.sh;
+in
+{
   programs.tmux = {
     enable = true;
     escapeTime = 10;
@@ -32,7 +36,7 @@
       set-option -g status-left "#[fg=#1a1b26,bg=#7aa2f7,bold]  #S #[fg=#7aa2f7,bg=#24283b,nobold]#[fg=#c0caf5,bg=#24283b,bold] #I:#P #[fg=#24283b,bg=#1a1b26,nobold]#{?window_zoomed_flag,#[fg=#1a1b26]#[bg=#bb9af7]#[bold] ZOOM #[fg=#bb9af7]#[bg=#1a1b26]#[nobold],}#{?pane_synchronized,#[fg=#1a1b26]#[bg=#e0af68]#[bold] SYNC #[fg=#e0af68]#[bg=#1a1b26]#[nobold],}#{?client_prefix,#[fg=#1a1b26]#[bg=#f7768e]#[bold] PREFIX #[fg=#f7768e]#[bg=#1a1b26]#[nobold],} "
 
       # Right: local/remote identity, VPN, Kubernetes, battery and time.
-      set-option -g status-right "#(${pkgs.bash}/bin/bash ${config.home.homeDirectory}/nixfiles/assets/tmux-status-right.sh #{pane_pid})"
+      set-option -g status-right "#(${pkgs.bash}/bin/bash ${statusRight} #{pane_pid})"
 
       ##### Key Bindings #####
       unbind C-b

@@ -1,13 +1,4 @@
-{ pkgs, userName, ... }:
-let
-  allowedUnfreePackages = [
-    "brave"
-    "codex"
-    "drawio"
-    "maccy"
-    "terraform"
-  ];
-in
+{ pkgs, userName, allowedUnfreePackages, ... }:
 {
   imports = [
     ./modules/homebrew.nix

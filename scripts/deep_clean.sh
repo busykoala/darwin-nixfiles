@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${NIXFILES_ALLOW_DEEP_CLEAN:-}" != "1" ]]; then
-  echo "Refusing destructive cleanup without NIXFILES_ALLOW_DEEP_CLEAN=1."
+if [[ "${REALLY_DEEP_CLEAN:-}" != "1" ]]; then
+  echo "Refusing destructive cleanup without REALLY_DEEP_CLEAN=1."
   echo "This script deletes Docker resources and broad cache/log paths."
   exit 1
 fi
@@ -17,7 +17,7 @@ echo "👉 Optimizing nix store..."
 nix-store --optimise || true
 
 ### Homebrew ###
-echo "👉 Homebrew cleanup..."
+echo "👉 Cleaning Homebrew caches..."
 /opt/homebrew/bin/brew cleanup -s || true
 /opt/homebrew/bin/brew autoremove || true
 
