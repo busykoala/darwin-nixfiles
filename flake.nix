@@ -2,10 +2,10 @@
   description = "Darwin configuration (stable)";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # Additional unstable channel for selected packages such as azure-cli
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -13,12 +13,22 @@
 
   outputs = { nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
     let
+      allowedUnfreePackages = [
+        "brave"
+        "codex"
+        "drawio"
+        "maccy"
+        "terraform"
+      ];
+
+      allowListedUnfree = pkg:
+        builtins.elem (nixpkgs.lib.getName pkg) allowedUnfreePackages;
+
       # Unstable package set, used only for selected packages (e.g. azure-cli)
       pkgsUnstable = import nixpkgs-unstable {
         system = "aarch64-darwin";
         config = {
-          allowUnfree = true;
-          allowUnfreePredicate = _: true;
+          allowUnfreePredicate = allowListedUnfree;
         };
       };
 
@@ -30,7 +40,11 @@
         };
         modules = [
           ./darwin.nix
-          { nix.enable = false; }
+          {
+            # Determinate Nix manages the Nix installation and daemon.
+            # Keep nix-darwin from writing nix.conf or managing nix services.
+            nix.enable = false;
+          }
           home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -45,24 +59,20 @@
           }
         ];
       };
-    in
-    {
-      darwinConfigurations = let
-        speedyMachine = mkDarwinConfig {
-          userName = "speedy";
-          sshIdentityFile = "~/.ssh/id_rsa";
-        };
-      in {
-        # busykoala device (Air)
-        Matthiass-MacBook-Air = mkDarwinConfig {
+      hosts = {
+        Matthiass-MacBook-Air = {
           userName = "busykoala";
           sshIdentityFile = "~/.ssh/id_ed25519";
         };
 
-        # speedy device (Pro)
-        speedy-machine = speedyMachine;
-        "matthiass-macbook-pro" = speedyMachine;
+        matthiass-macbook-pro = {
+          userName = "speedy";
+          sshIdentityFile = "~/.ssh/id_rsa";
+        };
       };
+    in
+    {
+      darwinConfigurations = builtins.mapAttrs (_: mkDarwinConfig) hosts;
 
       formatter.aarch64-darwin =
         nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;

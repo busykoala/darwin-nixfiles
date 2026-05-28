@@ -2,8 +2,6 @@
 {
   programs.git = {
     enable = true;
-    userEmail = "matthias@busykoala.io";
-    userName = "Matthias Osswald";
     ignores = [
       ".idea"
       ".DS_Store"
@@ -17,7 +15,9 @@
       "tags.temp"
       ".direnv"
     ];
-    extraConfig = {
+    settings = {
+      user.email = "matthias@busykoala.io";
+      user.name = "Matthias Osswald";
       core = {
         pager = "delta --features tokyo-night";
         editor = "nvim";
@@ -44,18 +44,10 @@
         side-by-side = true;
         zero-style = "syntax";
       };
-      format = {
-        pretty = "%C(blue)%h%Creset %s %C(green)%d%Creset [%C(red)%an%Creset, %C(cyan)%cr%Creset] %C(bold reverse)%N%Creset";
-      };
-      branch = {
-        autosetuprebase = "always";
-      };
-      gpg = {
-        program = "${config.home.profileDirectory}/bin/gpg";
-      };
-      commit = {
-        gpgSign = true;
-      };
+      format.pretty = "%C(blue)%h%Creset %s %C(green)%d%Creset [%C(red)%an%Creset, %C(cyan)%cr%Creset] %C(bold reverse)%N%Creset";
+      branch.autosetuprebase = "always";
+      gpg.program = "${config.home.profileDirectory}/bin/gpg";
+      commit.gpgSign = true;
     };
     lfs.enable = true;
   };

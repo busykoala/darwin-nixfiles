@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${NIXFILES_ALLOW_BREW_CLEAN:-}" != "1" ]]; then
+    echo "Refusing to uninstall Homebrew casks without NIXFILES_ALLOW_BREW_CLEAN=1."
+    echo "nix-darwin homebrew.onActivation.cleanup is the default cleanup path."
+    exit 1
+fi
 
 # Extract casks from the Nix file
 nix_casks=$(sed -n '/casks = \[/,/];/p' modules/homebrew.nix | sed -E 's/^[[:space:]]*"([^"]+)"[[:space:]]*$/\1/' | grep -v 'casks = \[' | grep -v '\];')

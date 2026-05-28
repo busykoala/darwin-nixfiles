@@ -1,28 +1,30 @@
-{ pkgs, userName, ... }: {
+{ pkgs, userName, ... }:
+let
+  allowedUnfreePackages = [
+    "brave"
+    "codex"
+    "drawio"
+    "maccy"
+    "terraform"
+  ];
+in
+{
   imports = [
     ./modules/homebrew.nix
     ./modules/services
   ];
 
-  environment = {
-    systemPackages = [
-      pkgs.pam-reattach
-    ];
-
-    etc."pam.d/sudo_local".text = ''
-      # Managed by Nix Darwin
-        auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
-        auth       sufficient     pam_tid.so
-    '';
-  };
+  environment.systemPackages = [
+    pkgs.pam-reattach
+  ];
 
   ids.gids.nixbld = 350;
 
   nixpkgs = {
     hostPlatform = "aarch64-darwin";
     config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
+      allowUnfreePredicate = pkg:
+        builtins.elem (pkgs.lib.getName pkg) allowedUnfreePackages;
     };
   };
 
@@ -53,7 +55,10 @@
     };
   };
 
-  security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
 
   users.users.${userName} = {
     name = userName;

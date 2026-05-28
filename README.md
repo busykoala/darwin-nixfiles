@@ -19,11 +19,23 @@ brew is used to install GUI apps that are not available via nix packags.
 ```bash
 git clone git@github.com:busykoala/darwin-nixfiles.git ~/nixfiles
 cd ~/nixfiles
-cp local.nix.example local.nix
-make [ help | rebuild | update | clean | format ]
+make [ help | rebuild | update | clean | format | check ]
 ```
 
-`local.nix` is machine-local and gitignored. Use it for per-host values such as username and SSH `IdentityFile` while keeping all shared config in git.
+This repository intentionally contains exactly two nix-darwin hosts:
+
+- `Matthiass-MacBook-Air` for the `busykoala` user
+- `matthiass-macbook-pro` for the `speedy` user
+
+`make rebuild` switches the configuration matching `hostname -s`. To build a
+specific host manually, run:
+
+```bash
+sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#Matthiass-MacBook-Air
+sudo -H nix run nix-darwin --no-warn-dirty --experimental-features 'flakes nix-command' -- switch --flake .#matthiass-macbook-pro
+```
+
+Run `make check` before pushing changes.
 
 ## Services
 

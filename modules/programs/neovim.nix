@@ -44,7 +44,7 @@ in
     ansible-language-server
     ansible-lint
     basedpyright
-    dockerfile-language-server-nodejs
+    dockerfile-language-server
     gopls
     jinja-lsp
     ltex-ls
@@ -72,10 +72,13 @@ in
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withRuby = true;
+    withPython3 = true;
 
     plugins = [
       {
         plugin = nixfilesNvim;
+        type = "lua";
         config = luaRequire "nixfiles.options";
       }
 
@@ -84,16 +87,19 @@ in
 
       {
         plugin = pkgs.vimPlugins.snacks-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.snacks";
       }
 
       {
         plugin = pkgs.vimPlugins.tokyonight-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.theme";
       }
 
       {
         plugin = pkgs.vimPlugins.lualine-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.lualine";
       }
 
@@ -123,66 +129,79 @@ in
           vim
           yaml
         ]);
+        type = "lua";
         config = luaRequire "nixfiles.plugins.treesitter";
       }
 
       {
         plugin = pkgs.vimPlugins.rainbow-delimiters-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.rainbow";
       }
 
       {
         plugin = pkgs.vimPlugins.gitsigns-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.gitsigns";
       }
 
       {
         plugin = pkgs.vimPlugins.diffview-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.diffview";
       }
 
       {
         plugin = pkgs.vimPlugins.neogit;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.neogit";
       }
 
       {
         plugin = pkgs.vimPlugins.flash-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.flash";
       }
 
       {
         plugin = pkgs.vimPlugins.oil-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.oil";
       }
 
       {
         plugin = pkgs.vimPlugins.comment-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.comment";
       }
 
       {
         plugin = pkgs.vimPlugins.which-key-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.which-key";
       }
 
       {
         plugin = pkgs.vimPlugins.trouble-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.trouble";
       }
 
       {
         plugin = pkgs.vimPlugins.todo-comments-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.todo-comments";
       }
 
       {
         plugin = pkgs.vimPlugins.render-markdown-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.render-markdown";
       }
 
       {
         plugin = pkgs.vimPlugins.blink-cmp;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.completion";
       }
 
@@ -190,6 +209,7 @@ in
 
       {
         plugin = pkgs.vimPlugins.nvim-lspconfig;
+        type = "lua";
         config = ''
           lua << EOF
           vim.g.nixfiles_ltex_cmd = '${pkgs.ltex-ls}/bin/ltex-ls'
@@ -200,16 +220,19 @@ in
 
       {
         plugin = pkgs.vimPlugins.conform-nvim;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.format";
       }
 
       {
         plugin = pkgs.vimPlugins.nvim-lint;
+        type = "lua";
         config = luaRequire "nixfiles.plugins.lint";
       }
 
       {
         plugin = codexNvim;
+        type = "lua";
         config = ''
           lua << EOF
           vim.g.nixfiles_codex_cmd = '${pkgsUnstable.codex}/bin/codex'

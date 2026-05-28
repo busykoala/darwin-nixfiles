@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ "${NIXFILES_ALLOW_DEEP_CLEAN:-}" != "1" ]]; then
+  echo "Refusing destructive cleanup without NIXFILES_ALLOW_DEEP_CLEAN=1."
+  echo "This script deletes Docker resources and broad cache/log paths."
+  exit 1
+fi
+
 echo "🧹 Running macOS Deep Clean..."
 
 ### Nix ###

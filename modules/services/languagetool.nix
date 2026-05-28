@@ -9,13 +9,15 @@
       Label = "org.nix-darwin.languagetool";
       ProgramArguments = [
         "${pkgs.languagetool}/bin/languagetool-server"
+        "--host"
+        "127.0.0.1"
         "--port"
         "8081"
       ];
       RunAtLoad = true;
       KeepAlive = true;
-      StandardOutPath = "/tmp/languagetool.log";
-      StandardErrorPath = "/tmp/languagetool.err";
+      StandardOutPath = "/Users/${userName}/Library/Logs/languagetool.log";
+      StandardErrorPath = "/Users/${userName}/Library/Logs/languagetool.err";
     };
   };
 }

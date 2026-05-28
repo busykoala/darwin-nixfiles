@@ -1,6 +1,8 @@
 # Makefile for Nix management with flakes
 
-.PHONY: help rebuild update clean format
+.PHONY: help rebuild update clean format check
+
+HOSTS := Matthiass-MacBook-Air matthiass-macbook-pro
 
 # Default target
 help:
@@ -10,6 +12,7 @@ help:
 	@echo "  make update        - Update flake inputs and rebuild"
 	@echo "  make clean         - Clean up old packages and configurations"
 	@echo "  make format        - Format the Nix files using nixpkgs-fmt"
+	@echo "  make check         - Run flake, formatting, statix, deadnix, and dry-run build checks"
 	@echo "  make kill-tmux     - Kill the tmux session named 'main'"
 
 rebuild:
@@ -46,15 +49,21 @@ clean:
 			fi; \
 		done || true
 	@rm -f /tmp/nix-gc-user.log /tmp/nix-gc-system.log
-	@echo "   Homebrew cleanup:"
-	@./scripts/brew_clean.sh || echo "⚠️  brew_clean.sh failed or is missing"
-
 format:
 	@echo "🧽 Formatting Nix sources..."
 	nix config check
 	nix fmt .
 	nix run nixpkgs#statix -- check .
 	nix run nixpkgs#deadnix -- .
+
+check:
+	nix flake check --show-trace --keep-going
+	nix run nixpkgs#nixpkgs-fmt -- --check .
+	nix run nixpkgs#statix -- check .
+	nix run nixpkgs#deadnix -- --fail .
+	@for host in $(HOSTS); do \
+		nix build .#darwinConfigurations.$$host.system --dry-run; \
+	done
 
 kill-tmux:
 	@echo "🛑 Killing tmux session..."

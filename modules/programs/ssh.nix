@@ -2,43 +2,51 @@
 {
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
 
-    extraConfig = ''
-      Host *
-        UseKeychain         yes
-        AddKeysToAgent      yes
-        IdentityFile        ${sshIdentityFile}
+    settings = {
+      "*" = {
+        AddKeysToAgent = "yes";
+        IdentityFile = sshIdentityFile;
+        UseKeychain = "yes";
+      };
 
-      Host                    rootServer
-        Hostname            194.13.82.8
-        User                root
-        ProxyJump           cockpitServer
+      rootServer = {
+        HostName = "194.13.82.8";
+        User = "root";
+        ProxyJump = "cockpitServer";
+      };
 
-      Host                    cockpitServer
-        Hostname            194.13.80.17
-        User                root
+      cockpitServer = {
+        HostName = "194.13.80.17";
+        User = "root";
+      };
 
-      Host                    mega-server
-        HostName            83.150.16.45
-        User                zords
-        IdentitiesOnly      yes
+      mega-server = {
+        HostName = "83.150.16.45";
+        User = "zords";
+        IdentitiesOnly = true;
+      };
 
-      Host                    blizzard
-        HostName            192.168.50.162
-        User                zords
-        ProxyJump           mega-server
-        IdentitiesOnly      yes
+      blizzard = {
+        HostName = "192.168.50.162";
+        User = "zords";
+        ProxyJump = "mega-server";
+        IdentitiesOnly = true;
+      };
 
-      Host                    turtle
-        HostName            192.168.50.188
-        User                zords
-        ProxyJump           mega-server
-        IdentitiesOnly      yes
+      turtle = {
+        HostName = "192.168.50.188";
+        User = "zords";
+        ProxyJump = "mega-server";
+        IdentitiesOnly = true;
+      };
 
-      Host                    seniornett-node-00
-        HostName            37.156.46.226
-        User                ubuntu
-        IdentitiesOnly      yes
-    '';
+      seniornett-node-00 = {
+        HostName = "37.156.46.226";
+        User = "ubuntu";
+        IdentitiesOnly = true;
+      };
+    };
   };
 }

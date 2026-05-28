@@ -2,6 +2,8 @@
   homebrew = {
     enable = true;
 
+    onActivation.cleanup = "check";
+
     masApps = { };
 
     casks = [
