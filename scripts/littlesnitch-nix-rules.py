@@ -24,6 +24,7 @@ HELP_REPLACEMENTS = {
     "process": "processPath",
     "via": "viaProcessPath",
 }
+HELP_PATH_REPLACEMENTS = {value: key for key, value in HELP_REPLACEMENTS.items()}
 EXEC_WRAPPER_RE = re.compile(r"^\s*exec\s+(.+)$")
 LITTLESNITCH_CLI = Path(
     "/Applications/Little Snitch.app/Contents/Components/littlesnitch"
@@ -389,12 +390,34 @@ def collect_nix_paths(value: Any, paths: set[str]) -> None:
         paths.add(value)
 
 
+def rule_help_paths(rule: dict[str, Any]) -> dict[str, str]:
+    help_text = rule.get("factoryHelpText")
+    if not isinstance(help_text, str):
+        return {}
+
+    paths: dict[str, str] = {}
+    for line in help_text.splitlines():
+        key, separator, value = line.partition(": ")
+        if not separator:
+            continue
+        rule_key = HELP_PATH_REPLACEMENTS.get(key)
+        if rule_key is not None and value.startswith("/nix/store/"):
+            paths[rule_key] = value
+    return paths
+
+
 def code_identifier_last_seen_path(model: dict[str, Any], digest: str) -> str | None:
     last_seen = model.get("lastSeenExecutableByCodeIdentifier")
     if not isinstance(last_seen, dict):
         return None
 
-    for key in (f"SHA256/{digest}", f"SHA256/{digest.upper()}", digest):
+    for key in (
+        f"{SHA256_IDENTIFIER_PREFIX}{digest}",
+        f"{SHA256_IDENTIFIER_PREFIX}{digest.upper()}",
+        f"SHA256/{digest}",
+        f"SHA256/{digest.upper()}",
+        digest,
+    ):
         value = last_seen.get(key)
         if isinstance(value, str) and value.startswith("/nix/store/"):
             return value
@@ -439,6 +462,7 @@ def collect_rule_reference_paths(model: dict[str, Any]) -> set[str]:
             path = identifier_path(model, value)
             if path is not None:
                 paths.add(path)
+        paths.update(rule_help_paths(rule).values())
     return paths
 
 
@@ -480,6 +504,7 @@ def rewrite_rule(
     updated = dict(rule)
     replacements: dict[str, str] = {}
     identifier_replacements: dict[str, str] = {}
+    help_paths = rule_help_paths(rule)
 
     for key in ("process", "via"):
         value = updated.get(key)
@@ -492,7 +517,7 @@ def rewrite_rule(
             replacements[key] = replacement
             continue
 
-        old_path = identifier_path(model, value)
+        old_path = identifier_path(model, value) or help_paths.get(key)
         if old_path is None:
             continue
         replacement = path_replacement(
@@ -501,8 +526,8 @@ def rewrite_rule(
         if replacement is None:
             continue
         replacement_identifier = path_identifier(replacement)
-        if replacement_identifier is not None and replacement_identifier != value:
-            updated[key] = replacement_identifier
+        if replacement_identifier is not None:
+            updated[key] = replacement
             replacements[key] = replacement
             identifier_replacements[key] = replacement_identifier
 
@@ -554,6 +579,9 @@ def add_code_requirement(model: dict[str, Any], path: str) -> bool:
     last_seen = model.setdefault("lastSeenExecutableByCodeIdentifier", {})
     if identifier is not None and isinstance(last_seen, dict):
         last_seen[identifier] = path
+        if identifier.startswith("SHA256/"):
+            digest = identifier.removeprefix("SHA256/")
+            last_seen[f"{SHA256_IDENTIFIER_PREFIX}{digest}"] = path
 
     return True
 
@@ -592,14 +620,19 @@ def is_expired_temporary_rule(rule: dict[str, Any]) -> bool:
     return contains_expired_temporary(rule)
 
 
-def unresolved_rule_reference(model: dict[str, Any], value: str) -> str | None:
+def unresolved_rule_reference(
+    model: dict[str, Any],
+    rule: dict[str, Any],
+    key: str,
+    value: str,
+) -> str | None:
     if value.startswith("/nix/store/"):
         parts = store_parts(value)
         if parts is not None and not Path(value).exists():
             return value
         return None
 
-    path = identifier_path(model, value)
+    path = identifier_path(model, value) or rule_help_paths(rule).get(key)
     if path is None:
         return None
     parts = store_parts(path)
@@ -638,7 +671,7 @@ def repair_model(
             value = rule.get(key)
             if not isinstance(value, str) or key in replacements:
                 continue
-            unresolved_reference = unresolved_rule_reference(model, value)
+            unresolved_reference = unresolved_rule_reference(model, rule, key, value)
             if unresolved_reference is not None:
                 unresolved.add(unresolved_reference)
         rewritten_rules.append(updated)

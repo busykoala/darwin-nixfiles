@@ -1,4 +1,8 @@
 { pkgs, userName, allowedUnfreePackages, ... }:
+
+let
+  littlesnitchCli = "/Applications/Little Snitch.app/Contents/Components/littlesnitch";
+in
 {
   imports = [
     ./modules/homebrew.nix
@@ -40,6 +44,24 @@
       enableKeyMapping = true;
       remapCapsLockToControl = true;
     };
+
+    activationScripts.littlesnitchNixRules.text = ''
+      littlesnitch_cli=${pkgs.lib.escapeShellArg littlesnitchCli}
+      if [ -x "$littlesnitch_cli" ]; then
+        echo "repairing Little Snitch rules for active Nix paths..."
+        env \
+          HOME=${pkgs.lib.escapeShellArg "/Users/${userName}"} \
+          USER=${pkgs.lib.escapeShellArg userName} \
+          SUDO_USER=${pkgs.lib.escapeShellArg userName} \
+          PATH="/etc/profiles/per-user/${userName}/bin:/run/current-system/sw/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+          ${pkgs.python3}/bin/python3 ${./scripts/littlesnitch-nix-rules.py} \
+            --apply \
+            --unresolved \
+            --littlesnitch-cli "$littlesnitch_cli"
+      else
+        echo "Little Snitch rule repair skipped; CLI not installed."
+      fi
+    '';
   };
 
   security.pam.services.sudo_local = {

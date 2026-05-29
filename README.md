@@ -73,8 +73,9 @@ same. This configuration installs `littlesnitch-nix-rules`, which repairs the
 current Little Snitch model by remapping Nix store paths to the active Nix
 profile closure.
 
-`make rebuild` runs the repair step after a successful switch when Little Snitch
-and the installed repair command are available.
+The nix-darwin activation step runs the repair after a successful switch when
+Little Snitch is installed. `make littlesnitch-rules` runs the same repair
+manually.
 
 Preview a repaired model:
 
@@ -97,5 +98,6 @@ The tool rewrites stale `/nix/store/...` process paths to current executable
 paths, resolves simple Nix launcher scripts such as Brave's `bin/brave` to the
 signed app executable, and ensures current Nix rule paths have Little Snitch
 file-hash code requirements. File-hash rules stored as
-`identifier.SHA256/<hash>` are remapped to the SHA256 identifier for the active
-matching executable.
+`identifier.SHA256/<hash>` are remapped to the active matching executable path
+and get a current SHA256 code requirement, including rules whose exported help
+text records the original Nix store path.
