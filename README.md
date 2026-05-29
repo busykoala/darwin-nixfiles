@@ -53,8 +53,8 @@ sudo -H darwin-rebuild switch --flake .#matthiass-macbook-pro
 For the first bootstrap before `darwin-rebuild` is available:
 
 ```bash
-sudo -H nix run nix-darwin -- switch --flake .#Matthiass-MacBook-Air
-sudo -H nix run nix-darwin -- switch --flake .#matthiass-macbook-pro
+sudo -H nix run .#darwin-rebuild -- switch --flake .#Matthiass-MacBook-Air
+sudo -H nix run .#darwin-rebuild -- switch --flake .#matthiass-macbook-pro
 ```
 
 ## Services

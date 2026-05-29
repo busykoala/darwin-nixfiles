@@ -1,6 +1,6 @@
 # Makefile for Nix management with flakes
 
-.PHONY: help rebuild update clean deep-clean format check
+.PHONY: help rebuild update clean deep-clean format check kill-tmux
 
 HOSTS := Matthiass-MacBook-Air matthiass-macbook-pro
 

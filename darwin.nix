@@ -5,10 +5,6 @@
     ./modules/services
   ];
 
-  environment.systemPackages = [
-    pkgs.pam-reattach
-  ];
-
   ids.gids.nixbld = 350;
 
   nixpkgs = {

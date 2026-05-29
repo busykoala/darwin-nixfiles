@@ -73,6 +73,12 @@
     {
       darwinConfigurations = builtins.mapAttrs (_: mkDarwinConfig) hosts;
 
+      apps.aarch64-darwin.darwin-rebuild = {
+        type = "app";
+        program = "${darwin.packages.aarch64-darwin.darwin-rebuild}/bin/darwin-rebuild";
+        meta.description = "Run darwin-rebuild from the locked nix-darwin input";
+      };
+
       formatter.aarch64-darwin =
         nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;
     };
