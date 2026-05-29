@@ -4,6 +4,7 @@
 
 HOSTS := Matthiass-MacBook-Air matthiass-macbook-pro
 LITTLESNITCH_NIX_RULES ?= /etc/profiles/per-user/$(USER)/bin/littlesnitch-nix-rules
+LITTLESNITCH_CLI ?= /Applications/Little Snitch.app/Contents/Components/littlesnitch
 
 # Default target
 help:
@@ -24,11 +25,12 @@ rebuild:
 	@$(MAKE) --no-print-directory littlesnitch-rules
 
 littlesnitch-rules:
-	@if [ -x "$(LITTLESNITCH_NIX_RULES)" ] && command -v littlesnitch >/dev/null 2>&1; then \
-		echo "🔐 Repairing Little Snitch rules for active Nix paths..."; \
-		sudo "$(LITTLESNITCH_NIX_RULES)" --apply; \
+	@if [ -x "$(LITTLESNITCH_NIX_RULES)" ] && [ -x "$(LITTLESNITCH_CLI)" ]; then \
+		echo "Repairing Little Snitch rules for active Nix paths..."; \
+		sudo env PATH="/etc/profiles/per-user/$(USER)/bin:/run/current-system/sw/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+			"$(LITTLESNITCH_NIX_RULES)" --apply --unresolved --littlesnitch-cli "$(LITTLESNITCH_CLI)"; \
 	else \
-		echo "ℹ️  Little Snitch rule repair skipped; command not installed yet."; \
+		echo "Little Snitch rule repair skipped; script or CLI not installed."; \
 	fi
 
 update:

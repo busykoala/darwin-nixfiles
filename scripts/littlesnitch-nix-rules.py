@@ -25,6 +25,10 @@ HELP_REPLACEMENTS = {
     "via": "viaProcessPath",
 }
 EXEC_WRAPPER_RE = re.compile(r"^\s*exec\s+(.+)$")
+LITTLESNITCH_CLI = Path(
+    "/Applications/Little Snitch.app/Contents/Components/littlesnitch"
+)
+SHA256_IDENTIFIER_PREFIX = "identifier.SHA256/"
 
 
 def target_user() -> str | None:
@@ -79,6 +83,30 @@ def basename_key(path: str) -> str:
     if parts is None:
         return ""
     return f"{parts[1]}:{Path(path).name}"
+
+
+def sha256_identifier(value: str) -> str | None:
+    if not value.startswith(SHA256_IDENTIFIER_PREFIX):
+        return None
+
+    digest = value.removeprefix(SHA256_IDENTIFIER_PREFIX)
+    return digest.lower() if re.fullmatch(r"[0-9a-fA-F]{64}", digest) else None
+
+
+def path_identifier(path: str) -> str | None:
+    digest = sha256_file(path)
+    return f"{SHA256_IDENTIFIER_PREFIX}{digest}" if digest is not None else None
+
+
+def sha256_file(path: str) -> str | None:
+    try:
+        with Path(path).open("rb") as handle:
+            hasher = hashlib.sha256()
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                hasher.update(chunk)
+    except OSError:
+        return None
+    return hasher.hexdigest()
 
 
 def wrapper_exec_target(path: Path) -> str | None:
@@ -361,6 +389,59 @@ def collect_nix_paths(value: Any, paths: set[str]) -> None:
         paths.add(value)
 
 
+def code_identifier_last_seen_path(model: dict[str, Any], digest: str) -> str | None:
+    last_seen = model.get("lastSeenExecutableByCodeIdentifier")
+    if not isinstance(last_seen, dict):
+        return None
+
+    for key in (f"SHA256/{digest}", f"SHA256/{digest.upper()}", digest):
+        value = last_seen.get(key)
+        if isinstance(value, str) and value.startswith("/nix/store/"):
+            return value
+    return None
+
+
+def code_requirement_path(model: dict[str, Any], digest: str) -> str | None:
+    code_requirements = model.get("codeRequirements")
+    if not isinstance(code_requirements, dict):
+        return None
+
+    for path, requirement in code_requirements.items():
+        if not isinstance(path, str) or not isinstance(requirement, dict):
+            continue
+        if path.startswith("/nix/store/") and requirement.get("type") == "fileHash":
+            code_identifier = requirement.get("codeIdentifier")
+            if isinstance(code_identifier, str) and code_identifier.lower() == digest:
+                return path
+    return None
+
+
+def identifier_path(model: dict[str, Any], value: str) -> str | None:
+    digest = sha256_identifier(value)
+    if digest is None:
+        return None
+
+    return code_identifier_last_seen_path(model, digest) or code_requirement_path(
+        model, digest
+    )
+
+
+def collect_rule_reference_paths(model: dict[str, Any]) -> set[str]:
+    paths: set[str] = set()
+    collect_nix_paths(model.get("rules", []), paths)
+    for rule in model.get("rules", []):
+        if not isinstance(rule, dict):
+            continue
+        for key in ("process", "via"):
+            value = rule.get(key)
+            if not isinstance(value, str):
+                continue
+            path = identifier_path(model, value)
+            if path is not None:
+                paths.add(path)
+    return paths
+
+
 def rewrite_help_text(text: str, replacements: dict[str, str]) -> str:
     for rule_key, help_key in HELP_REPLACEMENTS.items():
         old = replacements.get(rule_key)
@@ -371,45 +452,71 @@ def rewrite_help_text(text: str, replacements: dict[str, str]) -> str:
     return text
 
 
+def path_replacement(
+    value: str,
+    exact_index: dict[tuple[str, str], str],
+    basename_index: dict[str, str],
+    suffix_index: dict[str, str],
+) -> str | None:
+    parts = store_parts(value)
+    if parts is None:
+        return None
+    _, package_key, suffix = parts
+    replacement = exact_index.get((package_key, suffix_key(suffix)))
+    if replacement is None:
+        replacement = basename_index.get(basename_key(value))
+    if replacement is None:
+        replacement = suffix_index.get(suffix_key(suffix))
+    return replacement
+
+
 def rewrite_rule(
+    model: dict[str, Any],
     rule: dict[str, Any],
     exact_index: dict[tuple[str, str], str],
     basename_index: dict[str, str],
     suffix_index: dict[str, str],
-) -> tuple[dict[str, Any], dict[str, str]]:
+) -> tuple[dict[str, Any], dict[str, str], dict[str, str]]:
     updated = dict(rule)
     replacements: dict[str, str] = {}
+    identifier_replacements: dict[str, str] = {}
 
     for key in ("process", "via"):
         value = updated.get(key)
         if not isinstance(value, str):
             continue
-        parts = store_parts(value)
-        if parts is None:
-            continue
-        _, package_key, suffix = parts
-        replacement = exact_index.get((package_key, suffix_key(suffix)))
-        if replacement is None:
-            replacement = basename_index.get(basename_key(value))
-        if replacement is None:
-            replacement = suffix_index.get(suffix_key(suffix))
+
+        replacement = path_replacement(value, exact_index, basename_index, suffix_index)
         if replacement is not None and replacement != value:
             updated[key] = replacement
             replacements[key] = replacement
+            continue
+
+        old_path = identifier_path(model, value)
+        if old_path is None:
+            continue
+        replacement = path_replacement(
+            old_path, exact_index, basename_index, suffix_index
+        )
+        if replacement is None:
+            continue
+        replacement_identifier = path_identifier(replacement)
+        if replacement_identifier is not None and replacement_identifier != value:
+            updated[key] = replacement_identifier
+            replacements[key] = replacement
+            identifier_replacements[key] = replacement_identifier
 
     if replacements and isinstance(updated.get("factoryHelpText"), str):
         updated["factoryHelpText"] = rewrite_help_text(
             updated["factoryHelpText"], replacements
         )
 
-    return updated, replacements
+    return updated, replacements, identifier_replacements
 
 
 def file_hash_requirement(path: str) -> dict[str, str] | None:
-    try:
-        with Path(path).open("rb") as handle:
-            digest = hashlib.file_digest(handle, "sha256").hexdigest()
-    except OSError:
+    digest = sha256_file(path)
+    if digest is None:
         return None
 
     return {
@@ -472,11 +579,39 @@ def needs_code_requirement(model: dict[str, Any], path: str) -> bool:
     return not isinstance(requirement, dict) or requirement.get("type") == "none"
 
 
+def is_expired_temporary_rule(rule: dict[str, Any]) -> bool:
+    def contains_expired_temporary(value: Any) -> bool:
+        if value == "expiredTemporary":
+            return True
+        if isinstance(value, dict):
+            return any(contains_expired_temporary(child) for child in value.values())
+        if isinstance(value, list):
+            return any(contains_expired_temporary(child) for child in value)
+        return False
+
+    return contains_expired_temporary(rule)
+
+
+def unresolved_rule_reference(model: dict[str, Any], value: str) -> str | None:
+    if value.startswith("/nix/store/"):
+        parts = store_parts(value)
+        if parts is not None and not Path(value).exists():
+            return value
+        return None
+
+    path = identifier_path(model, value)
+    if path is None:
+        return None
+    parts = store_parts(path)
+    if parts is not None and not Path(path).exists():
+        return f"{value} -> {path}"
+    return None
+
+
 def repair_model(
     model: dict[str, Any],
 ) -> tuple[dict[str, Any], Counter[str], list[str]]:
-    old_paths: set[str] = set()
-    collect_nix_paths(model.get("rules", []), old_paths)
+    old_paths = collect_rule_reference_paths(model)
     candidates = discover_candidates(old_paths)
     exact_index, basename_index, suffix_index = replacement_indexes(candidates)
 
@@ -488,22 +623,24 @@ def repair_model(
         if not isinstance(rule, dict):
             rewritten_rules.append(rule)
             continue
+        if is_expired_temporary_rule(rule):
+            stats["expired_temporary_pruned"] += 1
+            continue
 
-        updated, replacements = rewrite_rule(
-            rule, exact_index, basename_index, suffix_index
+        updated, replacements, identifier_replacements = rewrite_rule(
+            model, rule, exact_index, basename_index, suffix_index
         )
         stats["path_replacements"] += len(replacements)
+        stats["identifier_replacements"] += len(identifier_replacements)
         rule_paths.update(nix_rule_paths(updated))
+        rule_paths.update(replacements.values())
         for key in ("process", "via"):
             value = rule.get(key)
-            if (
-                isinstance(value, str)
-                and value.startswith("/nix/store/")
-                and key not in replacements
-            ):
-                parts = store_parts(value)
-                if parts is not None and not Path(value).exists():
-                    unresolved.add(value)
+            if not isinstance(value, str) or key in replacements:
+                continue
+            unresolved_reference = unresolved_rule_reference(model, value)
+            if unresolved_reference is not None:
+                unresolved.add(unresolved_reference)
         rewritten_rules.append(updated)
 
     repaired = dict(model)
@@ -524,17 +661,19 @@ def repair_model(
     return repaired, stats, sorted(unresolved)
 
 
-def load_model(path: Path | None) -> dict[str, Any]:
+def littlesnitch_command(cli: Path) -> str:
+    if cli.exists() and os.access(cli, os.X_OK):
+        return str(cli)
+    raise SystemExit(f"littlesnitch command not found at {cli}")
+
+
+def load_model(path: Path | None, cli: Path) -> dict[str, Any]:
     if path is not None:
         with path.open() as handle:
             return json.load(handle)
 
-    littlesnitch = shutil.which("littlesnitch")
-    if littlesnitch is None:
-        raise SystemExit("littlesnitch command not found")
-
     completed = subprocess.run(
-        [littlesnitch, "export-model"],
+        [littlesnitch_command(cli), "export-model"],
         check=True,
         text=True,
         stdout=subprocess.PIPE,
@@ -549,12 +688,14 @@ def write_model(path: Path, model: dict[str, Any]) -> None:
         handle.write("\n")
 
 
-def restore_model(path: Path) -> None:
-    littlesnitch = shutil.which("littlesnitch")
-    if littlesnitch is None:
-        raise SystemExit("littlesnitch command not found")
+def restore_model(path: Path, cli: Path) -> None:
     subprocess.run(
-        [littlesnitch, "restore-model", "--preserve-terminal-access", str(path)],
+        [
+            littlesnitch_command(cli),
+            "restore-model",
+            "--preserve-terminal-access",
+            str(path),
+        ],
         check=True,
     )
 
@@ -577,6 +718,17 @@ def parse_args() -> argparse.Namespace:
         help="Restore the repaired model with littlesnitch restore-model.",
     )
     parser.add_argument(
+        "--allow-unresolved",
+        action="store_true",
+        help="Apply even if stale Nix paths or identifiers could not be mapped.",
+    )
+    parser.add_argument(
+        "--littlesnitch-cli",
+        type=Path,
+        default=LITTLESNITCH_CLI,
+        help=f"Little Snitch CLI path. Defaults to {LITTLESNITCH_CLI}.",
+    )
+    parser.add_argument(
         "--unresolved",
         action="store_true",
         help="Print stale Nix paths that could not be mapped.",
@@ -586,7 +738,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    model = load_model(args.input)
+    model = load_model(args.input, args.littlesnitch_cli)
     repaired, stats, unresolved = repair_model(model)
 
     output = args.output
@@ -604,7 +756,9 @@ def main() -> int:
     print(f"rules: {stats['rules']}")
     print(f"candidate executables: {stats['candidates']}")
     print(f"path replacements: {stats['path_replacements']}")
+    print(f"identifier replacements: {stats['identifier_replacements']}")
     print(f"code requirements updated: {stats['code_requirements']}")
+    print(f"expired temporary rules pruned: {stats['expired_temporary_pruned']}")
     print(f"unresolved stale paths: {len(unresolved)}")
     print(f"repaired model: {output}")
 
@@ -613,6 +767,12 @@ def main() -> int:
             print(path)
 
     if args.apply:
+        if unresolved and not args.allow_unresolved:
+            print(
+                "refusing to apply with unresolved stale paths; "
+                "pass --allow-unresolved to override"
+            )
+            return 1
         backup = (
             output.parent
             / "backups"
@@ -620,7 +780,7 @@ def main() -> int:
         )
         write_model(backup, model)
         print(f"original model backup: {backup}")
-        restore_model(output)
+        restore_model(output, args.littlesnitch_cli)
         print("restored repaired Little Snitch model")
 
     return 0

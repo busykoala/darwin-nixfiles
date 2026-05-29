@@ -41,9 +41,10 @@ make rebuild
 ```
 
 `make rebuild` uses `hostname -s`, so the macOS short hostname must match one of
-the flake outputs.
+the flake outputs. Prefer this target for normal rebuilds because it also runs
+post-rebuild maintenance such as Little Snitch Nix rule repair.
 
-To switch explicitly:
+To switch explicitly without post-rebuild maintenance:
 
 ```bash
 sudo -H darwin-rebuild switch --flake .#Matthiass-MacBook-Air
@@ -87,8 +88,14 @@ Apply the repaired model:
 sudo littlesnitch-nix-rules --apply
 ```
 
+`--apply` refuses to restore the model when stale Nix paths or SHA256
+identifiers cannot be mapped to active executables. Use `--allow-unresolved`
+only when you have reviewed the unresolved entries and intentionally want to
+keep them.
+
 The tool rewrites stale `/nix/store/...` process paths to current executable
 paths, resolves simple Nix launcher scripts such as Brave's `bin/brave` to the
 signed app executable, and ensures current Nix rule paths have Little Snitch
-file-hash code requirements. It does not replace process paths with Little
-Snitch identity strings.
+file-hash code requirements. File-hash rules stored as
+`identifier.SHA256/<hash>` are remapped to the SHA256 identifier for the active
+matching executable.

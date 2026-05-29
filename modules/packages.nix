@@ -11,6 +11,14 @@ let
       (pkg: lib.meta.availableOn stdenv.hostPlatform pkg)
       packages;
 
+  littlesnitchNixRules = pkgs.writeShellApplication {
+    name = "littlesnitch-nix-rules";
+    runtimeInputs = [ pkgs.python3 ];
+    text = ''
+      exec ${pkgs.python3}/bin/python3 ${../scripts/littlesnitch-nix-rules.py} "$@"
+    '';
+  };
+
   coreTools = with pkgs; [
     bat # Cat with syntax highlighting
     curl # HTTP client
@@ -56,6 +64,7 @@ let
     inetutils # Network utilities
     jwt-cli # JWT decoder
     libsndfile # Audio file library
+    littlesnitchNixRules # Repair Little Snitch rules after Nix store path changes
     nodejs # Node.js runtime
     openssl # TLS and crypto toolkit
     pnpm # JavaScript package manager
@@ -101,14 +110,6 @@ let
     nerd-fonts.fira-code # Fira Code Nerd Font
   ];
 
-  littlesnitchNixRules = pkgs.writeShellApplication {
-    name = "littlesnitch-nix-rules";
-    runtimeInputs = [ pkgs.python3 ];
-    text = ''
-      exec python3 ${../scripts/littlesnitch-nix-rules.py} "$@"
-    '';
-  };
-
   packages =
     onlyAvailableOnHost (
       coreTools
@@ -117,7 +118,6 @@ let
       ++ kubernetesTools
       ++ securityTools
       ++ desktopTools
-      ++ [ littlesnitchNixRules ]
     );
 in
 {
