@@ -14,7 +14,6 @@
   outputs = { nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
     let
       allowedUnfreePackages = [
-        "brave"
         "codex"
         "drawio"
         "maccy"

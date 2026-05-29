@@ -1,8 +1,9 @@
 # Makefile for Nix management with flakes
 
-.PHONY: help rebuild update clean deep-clean format check kill-tmux
+.PHONY: help rebuild update clean deep-clean format check littlesnitch-rules kill-tmux
 
 HOSTS := Matthiass-MacBook-Air matthiass-macbook-pro
+LITTLESNITCH_NIX_RULES ?= /etc/profiles/per-user/$(USER)/bin/littlesnitch-nix-rules
 
 # Default target
 help:
@@ -14,11 +15,21 @@ help:
 	@echo "  make deep-clean    - Run aggressive cleanup of stubborn store paths"
 	@echo "  make format        - Format the Nix files using nixpkgs-fmt"
 	@echo "  make check         - Run flake, formatting, statix, deadnix, and dry-run build checks"
+	@echo "  make littlesnitch-rules - Repair Little Snitch rules for current Nix paths"
 	@echo "  make kill-tmux     - Kill the tmux session named 'main'"
 
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
 	@sudo -H darwin-rebuild switch --flake .#$(shell hostname -s)
+	@$(MAKE) --no-print-directory littlesnitch-rules
+
+littlesnitch-rules:
+	@if [ -x "$(LITTLESNITCH_NIX_RULES)" ] && command -v littlesnitch >/dev/null 2>&1; then \
+		echo "🔐 Repairing Little Snitch rules for active Nix paths..."; \
+		sudo "$(LITTLESNITCH_NIX_RULES)" --apply; \
+	else \
+		echo "ℹ️  Little Snitch rule repair skipped; command not installed yet."; \
+	fi
 
 update:
 	@echo "⬆️  Updating flake inputs..."

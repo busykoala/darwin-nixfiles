@@ -95,12 +95,19 @@ let
   ];
 
   desktopTools = with pkgs; [
-    brave # Browser
     drawio # Diagram editor
     gimp # Image editor
     maccy # Clipboard manager
     nerd-fonts.fira-code # Fira Code Nerd Font
   ];
+
+  littlesnitchNixRules = pkgs.writeShellApplication {
+    name = "littlesnitch-nix-rules";
+    runtimeInputs = [ pkgs.python3 ];
+    text = ''
+      exec python3 ${../scripts/littlesnitch-nix-rules.py} "$@"
+    '';
+  };
 
   packages =
     onlyAvailableOnHost (
@@ -110,6 +117,7 @@ let
       ++ kubernetesTools
       ++ securityTools
       ++ desktopTools
+      ++ [ littlesnitchNixRules ]
     );
 in
 {

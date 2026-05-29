@@ -63,3 +63,32 @@ sudo -H nix run .#darwin-rebuild -- switch --flake .#matthiass-macbook-pro
 
 A LanguageTool service is configured at `http://localhost:8081` to be used in e.g.
 the browser extension.
+
+## Little Snitch and Nix
+
+Nix rebuilds change `/nix/store/...` paths, so Little Snitch rules that point at
+Nix executables can become stale even when the application is conceptually the
+same. This configuration installs `littlesnitch-nix-rules`, which repairs the
+current Little Snitch model by remapping Nix store paths to the active Nix
+profile closure.
+
+`make rebuild` runs the repair step after a successful switch when Little Snitch
+and the installed repair command are available.
+
+Preview a repaired model:
+
+```bash
+sudo littlesnitch-nix-rules --unresolved
+```
+
+Apply the repaired model:
+
+```bash
+sudo littlesnitch-nix-rules --apply
+```
+
+The tool rewrites stale `/nix/store/...` process paths to current executable
+paths, resolves simple Nix launcher scripts such as Brave's `bin/brave` to the
+signed app executable, and ensures current Nix rule paths have Little Snitch
+file-hash code requirements. It does not replace process paths with Little
+Snitch identity strings.

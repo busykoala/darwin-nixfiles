@@ -8,6 +8,7 @@
 
     casks = [
       "android-platform-tools"
+      "brave-browser"
       "libreoffice"
       "raycast"
       "shottr"
