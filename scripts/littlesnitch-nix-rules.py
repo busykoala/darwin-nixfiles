@@ -503,7 +503,7 @@ def rewrite_rule(
 ) -> tuple[dict[str, Any], dict[str, str], dict[str, str]]:
     updated = dict(rule)
     replacements: dict[str, str] = {}
-    identifier_replacements: dict[str, str] = {}
+    sha_identifier_path_replacements: dict[str, str] = {}
     help_paths = rule_help_paths(rule)
 
     for key in ("process", "via"):
@@ -529,14 +529,14 @@ def rewrite_rule(
         if replacement_identifier is not None:
             updated[key] = replacement
             replacements[key] = replacement
-            identifier_replacements[key] = replacement_identifier
+            sha_identifier_path_replacements[key] = replacement
 
     if replacements and isinstance(updated.get("factoryHelpText"), str):
         updated["factoryHelpText"] = rewrite_help_text(
             updated["factoryHelpText"], replacements
         )
 
-    return updated, replacements, identifier_replacements
+    return updated, replacements, sha_identifier_path_replacements
 
 
 def file_hash_requirement(path: str) -> dict[str, str] | None:
@@ -607,6 +607,28 @@ def needs_code_requirement(model: dict[str, Any], path: str) -> bool:
     return not isinstance(requirement, dict) or requirement.get("type") == "none"
 
 
+def prune_unreferenced_empty_nix_code_requirements(
+    model: dict[str, Any],
+    referenced_paths: set[str],
+) -> int:
+    code_requirements = model.get("codeRequirements")
+    if not isinstance(code_requirements, dict):
+        return 0
+
+    stale_paths = [
+        path
+        for path, requirement in code_requirements.items()
+        if isinstance(path, str)
+        and path.startswith("/nix/store/")
+        and path not in referenced_paths
+        and isinstance(requirement, dict)
+        and requirement.get("type") == "none"
+    ]
+    for path in stale_paths:
+        del code_requirements[path]
+    return len(stale_paths)
+
+
 def is_expired_temporary_rule(rule: dict[str, Any]) -> bool:
     def contains_expired_temporary(value: Any) -> bool:
         if value == "expiredTemporary":
@@ -618,6 +640,22 @@ def is_expired_temporary_rule(rule: dict[str, Any]) -> bool:
         return False
 
     return contains_expired_temporary(rule)
+
+
+def is_unapproved_determinate_suggestion(rule: dict[str, Any]) -> bool:
+    if rule.get("action") != "suggestion" or rule.get("approved") is not False:
+        return False
+
+    values = [
+        value
+        for key in ("process", "via", "factoryHelpText")
+        if isinstance((value := rule.get(key)), str)
+    ]
+    text = "\n".join(values)
+    return (
+        "systems.determinate.determinate-nixd" in text
+        or "cf.install.determinate.systems" in text
+    )
 
 
 def unresolved_rule_reference(
@@ -659,12 +697,17 @@ def repair_model(
         if is_expired_temporary_rule(rule):
             stats["expired_temporary_pruned"] += 1
             continue
+        if is_unapproved_determinate_suggestion(rule):
+            stats["unapproved_determinate_suggestions_pruned"] += 1
+            continue
 
-        updated, replacements, identifier_replacements = rewrite_rule(
+        updated, replacements, sha_identifier_path_replacements = rewrite_rule(
             model, rule, exact_index, basename_index, suffix_index
         )
         stats["path_replacements"] += len(replacements)
-        stats["identifier_replacements"] += len(identifier_replacements)
+        stats["sha_identifier_path_replacements"] += len(
+            sha_identifier_path_replacements
+        )
         rule_paths.update(nix_rule_paths(updated))
         rule_paths.update(replacements.values())
         for key in ("process", "via"):
@@ -684,6 +727,9 @@ def repair_model(
         repaired["lastSeenExecutableByCodeIdentifier"] = dict(
             model["lastSeenExecutableByCodeIdentifier"]
         )
+    stats["stale_code_requirements_pruned"] = (
+        prune_unreferenced_empty_nix_code_requirements(repaired, rule_paths)
+    )
     for path in sorted(rule_paths):
         if needs_code_requirement(repaired, path) and add_code_requirement(
             repaired, path
@@ -789,9 +835,20 @@ def main() -> int:
     print(f"rules: {stats['rules']}")
     print(f"candidate executables: {stats['candidates']}")
     print(f"path replacements: {stats['path_replacements']}")
-    print(f"identifier replacements: {stats['identifier_replacements']}")
+    print(
+        "SHA256 identifier rules remapped to paths: "
+        f"{stats['sha_identifier_path_replacements']}"
+    )
     print(f"code requirements updated: {stats['code_requirements']}")
+    print(
+        "stale code requirements pruned: "
+        f"{stats['stale_code_requirements_pruned']}"
+    )
     print(f"expired temporary rules pruned: {stats['expired_temporary_pruned']}")
+    print(
+        "unapproved Determinate suggestions pruned: "
+        f"{stats['unapproved_determinate_suggestions_pruned']}"
+    )
     print(f"unresolved stale paths: {len(unresolved)}")
     print(f"repaired model: {output}")
 

@@ -22,6 +22,7 @@ help:
 rebuild:
 	@echo "🔄 Rebuilding system configuration..."
 	@sudo -H darwin-rebuild switch --flake .#$(shell hostname -s)
+	@$(MAKE) --no-print-directory littlesnitch-rules
 
 littlesnitch-rules:
 	@if [ -x "$(LITTLESNITCH_NIX_RULES)" ] && [ -x "$(LITTLESNITCH_CLI)" ]; then \
