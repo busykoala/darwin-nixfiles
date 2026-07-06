@@ -28,16 +28,15 @@ git clone git@github.com:busykoala/darwin-nixfiles.git ~/nixfiles
 cd ~/nixfiles
 ```
 
-Check the configuration:
+Common commands:
 
 ```bash
-make check
-```
-
-Apply the configuration for the current host:
-
-```bash
-make rebuild
+make check          # validate flake, formatting, lint, and host builds
+make rebuild        # switch current host and repair Little Snitch rules
+make update         # update flake inputs, update Homebrew, then rebuild
+make format         # format and lint Nix sources
+make clean          # collect old Nix garbage
+make deep-clean     # aggressive cleanup; requires REALLY_DEEP_CLEAN=1
 ```
 
 `make rebuild` uses `hostname -s`, so the macOS short hostname must match one of

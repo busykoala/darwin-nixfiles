@@ -36,6 +36,10 @@ littlesnitch-rules:
 update:
 	@echo "⬆️  Updating flake inputs..."
 	@nix flake update
+	@if [ -x /opt/homebrew/bin/brew ]; then \
+		echo "🍺 Updating Homebrew..."; \
+		/opt/homebrew/bin/brew update; \
+	fi
 	@$(MAKE) --no-print-directory rebuild
 
 clean:
