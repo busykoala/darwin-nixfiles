@@ -28,6 +28,14 @@ let
     };
   };
 
+  # nixpkgs currently fetches this revision from Codeberg, which returns 403.
+  # The GitHub repository is an official mirror with the same Git objects.
+  nvimLint = pkgs.vimPlugins.nvim-lint.overrideAttrs (old: {
+    src = old.src.override {
+      url = "https://github.com/mfussenegger/nvim-lint.git";
+    };
+  });
+
   luaRequire = module: ''
     require('${module}')
   '';
@@ -229,7 +237,7 @@ in
       }
 
       {
-        plugin = pkgs.vimPlugins.nvim-lint;
+        plugin = nvimLint;
         type = "lua";
         config = luaRequire "nixfiles.plugins.lint";
       }
