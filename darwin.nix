@@ -13,6 +13,17 @@ in
 
   nixpkgs = {
     hostPlatform = "aarch64-darwin";
+    overlays = [
+      (_final: prev: {
+        protobuf_33 = prev.protobuf_33.overrideAttrs (old: {
+          # Protobuf 33.6's random map-order test fails on Darwin.
+          # Keep the remaining tests enabled until upstream fixes it.
+          env = (old.env or { }) // pkgs.lib.optionalAttrs
+            (prev.stdenv.hostPlatform.isDarwin && old.version == "33.6")
+            { GTEST_FILTER = "-MapImplTest.RandomOrdering"; };
+        });
+      })
+    ];
     config = {
       allowUnfreePredicate = pkg:
         builtins.elem (pkgs.lib.getName pkg) allowedUnfreePackages;

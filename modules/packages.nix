@@ -108,6 +108,7 @@ let
     gimp # Image editor
     maccy # Clipboard manager
     nerd-fonts.fira-code # Fira Code Nerd Font
+    roomeqwizard # REW Sound
   ];
 
   packages =

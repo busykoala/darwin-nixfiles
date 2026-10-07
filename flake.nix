@@ -17,6 +17,7 @@
         "codex"
         "drawio"
         "maccy"
+        "roomeqwizard"
       ];
 
       allowListedUnfree = pkg:
