@@ -57,6 +57,13 @@ sudo -H nix run .#darwin-rebuild -- switch --flake .#Matthiass-MacBook-Air
 sudo -H nix run .#darwin-rebuild -- switch --flake .#matthiass-macbook-pro
 ```
 
+## Widelands
+
+Widelands is installed through the Homebrew formula. A rebuild creates
+`/Applications/Widelands.app` so it can be opened from Finder or Raycast.
+It can also be launched directly from Terminal with
+`/opt/homebrew/bin/widelands` on Apple Silicon.
+
 ## Services
 
 ### LanguageTool
